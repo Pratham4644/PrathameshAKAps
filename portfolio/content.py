@@ -36,7 +36,7 @@ COLLEGE = "Annasaheb Dange College of Engineering and Technology"
 BRANCH = "Computer Science and Engineering (Internet of Things and Cyber Security Including Blockchain Technology)"
 YEAR = "Third Year B.Tech"
 CGPA = "7.51"
-YEAR_RANGE = "2022 – Present"
+YEAR_RANGE = "Graduate 2027"
 
 # =============================================================================
 # STATS (About section)
