@@ -21,10 +21,10 @@ ROLE_TITLES = [
 ]
 
 BIO = (
-    "Prathamesh Shinde is a third-year engineering student focused on building "
-    "practical AI, machine learning, and automation systems from scratch. He designs, "
-    "develops, and deploys complete solutions independently, combining machine learning, "
-    "backend development, and system integration to solve real-world problems. His work "
+    "I am a third-year engineering student focused on building "
+    "practical AI, machine learning, and automation systems from scratch. I design, "
+    "develop, and deploy complete solutions independently, combining machine learning, "
+    "backend development, and system integration to solve real-world problems. My work "
     "centers on intelligent automation, scalable software products, and real-world "
     "execution rather than academic theory."
 )
