@@ -43,7 +43,7 @@ YEAR_RANGE = "Graduate 2027"
 # =============================================================================
 STATS = [
     {"value": "3rd Year", "label": "B.Tech"},
-    {"value": "7.51", "label": "CGPA"},
+    {"value": "7.5", "label": "CGPA"},
     {"value": "4+", "label": "Projects Built"},
 ]
 

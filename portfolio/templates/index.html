@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <meta name="description" content="Portfolio of Prathamesh Shinde, ML Developer and third-year B.Tech student building AI systems, automation tools, and machine learning applications.">
-  <title>Prathamesh Shinde — ML Developer</title>
+  <title>Prathamesh Shinde - ML Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
@@ -254,7 +254,7 @@ body.theme-light .theme-icon.light-icon { display: inline; color: #1a2332; }
   animation: heroFadeUp 0.6s ease forwards 0.1s;
 }
 .terminal-label::after {
-  content: '▌';
+  content: '|';
   animation: blink 1s step-end infinite;
 }
 .hero-name {
@@ -815,7 +815,7 @@ section {
 .cert-card h4 { font-size: 16px; margin-bottom: 8px; padding-right: 32px; }
 .cert-card .issuer { font-size: 13px; color: var(--text-muted); }
 .cert-card.achievement h4::before {
-  content: '🏆 ';
+  content: '[*] ';
 }
 
 /* Contact */
@@ -944,8 +944,8 @@ footer p {
       <a href="#" class="logo" style="font-family:'JetBrains Mono';font-weight:700;color:var(--accent-cyan);text-decoration:none;">{{ full_name.split()[-1] }}</a>
       <div class="nav-right">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Toggle theme">
-          <span class="theme-icon dark-icon">☀</span>
-          <span class="theme-icon light-icon">☽</span>
+          <span class="theme-icon dark-icon">D</span>
+          <span class="theme-icon light-icon">L</span>
         </button>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
@@ -1100,7 +1100,7 @@ footer p {
             <div class="exp-tags">
               {% for tag in exp.tags %}<span class="exp-tag">{{ tag }}</span>{% endfor %}
             </div>
-            <a href="{{ exp.certificate_url }}" class="exp-cert-link" target="_blank" rel="noopener noreferrer">View Certificate →</a>
+            <a href="{{ exp.certificate_url }}" class="exp-cert-link" target="_blank" rel="noopener noreferrer">View Certificate -></a>
             <div class="specular" data-specular></div>
           </div>
         </div>
@@ -1165,7 +1165,7 @@ footer p {
   </main>
 
   <footer>
-    <p>Designed and built by {{ full_name }}<br>© 2025 {{ full_name }}. All rights reserved.</p>
+    <p>Designed and built by {{ full_name }}<br>(c) 2025 {{ full_name }}. All rights reserved.</p>
   </footer>
 
   <!-- 3D floating shapes -->
