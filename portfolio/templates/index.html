@@ -528,24 +528,28 @@ section {
 .stat-box {
   flex: 1;
   min-width: min(120px, 100%);
-  padding: clamp(16px, 4vw, 24px);
+  padding: clamp(20px, 5vw, 28px);
   background: var(--bg-secondary);
-  border: 1px solid rgba(0, 229, 255, 0.2);
+  border: 1px solid rgba(0, 229, 255, 0.25);
   border-radius: 12px;
   text-align: center;
   transition: transform 0.5s ease;
+  overflow: visible;
 }
 .stat-box .value {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: 28px;
+  font-size: clamp(32px, 7vw, 42px);
   color: var(--accent-cyan);
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px var(--glow);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 .stat-box .label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 .about-skills {
@@ -628,7 +632,15 @@ section {
   color: var(--text-muted);
   min-width: 32px;
   text-align: right;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
+.skill-row:hover .skill-pct { opacity: 1; }
+.skill-bar-header .skill-pct-val {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.skill-bar-wrap:hover .skill-pct-val { opacity: 1; }
 
 /* Projects grid */
 .projects-grid {
@@ -1021,7 +1033,7 @@ footer p {
           <div class="skill-bar-wrap">
             <div class="skill-bar-header">
               <span>{{ group.name }}</span>
-              <span>{{ group.percent }}%</span>
+              <span class="skill-pct-val">{{ group.percent }}%</span>
             </div>
             <div class="skill-bar-track">
               <div class="skill-bar-fill" data-fill data-width="{{ group.percent }}" style="background:{{ group.accent }};--fill-width:{{ group.percent }}%"></div>
