@@ -167,6 +167,79 @@ PROJECTS = [
         "github": "https://github.com/Pratham4644/House-price-prediction",
         "badge": None,
     },
+    {
+        "title": "Vasu-Vaidya — IoT Smart Farming System",
+        "accent": "#39ff14",
+        "description": (
+            "An AI-driven precision agriculture platform that fuses real-time IoT sensor data with cloud-based "
+            "machine learning to deliver actionable crop-specific guidance. Sensors continuously monitor soil NPK "
+            "levels, pH, electrical conductivity, moisture, and ambient temperature, streaming telemetry to a "
+            "Node.js backend over MQTT. A Python ML layer — built on Scikit-learn and XGBoost — processes "
+            "incoming readings to generate fertilizer dosage recommendations, detect nutrient deficiencies, and "
+            "trigger threshold-based alerts before crop damage occurs. "
+            "Designed for low-connectivity rural environments, the system supports offline edge inference and "
+            "syncs to the cloud when connectivity is available. The REST API exposes crop health scores and "
+            "historical trend data to a lightweight Express.js dashboard, enabling farmers and agronomists to "
+            "track field conditions over time. Reduces soil degradation through data-driven intervention, "
+            "improves yield predictability, and lowers input costs by preventing over-fertilization."
+        ),
+        "stack": (
+            "Node.js, Express.js, Python, Scikit-learn, XGBoost, Pandas, NumPy, "
+            "MQTT, SQLite, REST API, IoT Sensors (NPK / pH / EC / DHT22)"
+        ),
+        "github": "https://github.com/Tanmay-Dhanaji-Patil/Team_Vasudha.git",
+        "badge": "Team Project",
+    },
+    {
+        "title": "Vasudha — Offline Multimodal RAG for Agricultural Advisory",
+        "accent": "#ffd700",
+        "description": (
+            "An end-to-end offline Retrieval-Augmented Generation pipeline built for agricultural advisory in "
+            "low-resource, no-internet environments. Vasudha indexes domain-specific agronomic documents — crop "
+            "guides, field manuals, disease references — using all-MiniLM-L6-v2 (384-dim) sentence embeddings "
+            "stored in a FAISS IndexFlatIP index, and answers natural language queries entirely on-device via "
+            "TinyLlama-1.1B through Ollama. No GPU, no API calls, no cloud dependency. "
+            "Built from scratch as undergraduate research at ADCET, Sangli. Achieved 91% top-3 retrieval "
+            "accuracy on an internal pilot benchmark, won 2nd place at the ADCET Internal Hackathon, and was "
+            "selected to represent the college at the DIPEX state-level project exhibition. "
+            "Active research extension targets the core modality mismatch in field-level advisory: a farmer "
+            "observing leaf discolouration cannot always translate a visual symptom into a precise text query. "
+            "The ongoing work aligns EfficientNet-B0 visual crop embeddings (PlantVillage) into the same FAISS "
+            "index as text, enabling joint image-text retrieval over a single unified knowledge base — making "
+            "symptom photographs a first-class query modality."
+        ),
+        "stack": (
+            "Python, PyMuPDF, Sentence-Transformers (all-MiniLM-L6-v2), FAISS, "
+            "TinyLlama-1.1B, Ollama, FastAPI, EfficientNet-B0 (research), PyTorch"
+        ),
+        "github": "https://github.com/Pratham4644/Vasudha_chatboat.git",
+        "badge": "Research Project · DIPEX Selected",
+    },
+    {
+        "title": "AI-Powered E-Waste Condition Classifier",
+        "accent": "#ff9500",
+        "description": (
+            "An end-to-end computer vision system that automates e-waste triage by classifying discarded "
+            "electronic devices into Usable, Repairable, or Trash — directly addressing the global problem of "
+            "inefficient e-waste sorting where millions of reusable devices are landfilled and recyclable "
+            "components never reach processing facilities. "
+            "Built a complete ML pipeline from scratch: dataset curation, YOLOv8 training, label mapping, "
+            "confidence-scored inference, and result persistence. Supports ten device categories including "
+            "batteries, mobile phones, PCBs, printers, televisions, keyboards, microwaves, and mice. "
+            "Wrapped the model in a full Streamlit web application featuring a dark-themed responsive UI, "
+            "file upload and model upload integration, dynamic confidence visualisation, and CSV-based "
+            "session logging. Integrated location-aware recycling centre mapping so users can find nearby "
+            "certified e-waste facilities directly from the app. "
+            "The project demonstrated that practical AI deployment requires combining ML engineering, "
+            "software architecture, UX design, and real-world usability — not model training alone."
+        ),
+        "stack": (
+            "Python, YOLOv8 (Ultralytics), Streamlit, PyTorch, PIL, "
+            "Pandas, JSON, CSV, Custom CSS, Geolocation API"
+        ),
+        "github": "https://github.com/Pratham4644/E-waste-locator-.git",
+        "badge": None,
+    },
 ]
 
 # =============================================================================

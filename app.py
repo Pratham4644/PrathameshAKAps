@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, render_template
 
 from portfolio.content import (
@@ -26,13 +28,17 @@ app = Flask(__name__, template_folder="portfolio/templates")
 
 @app.route("/")
 def index():
+    first_name = FULL_NAME.split()[0] if FULL_NAME else ""
+    last_name = FULL_NAME.split()[-1] if FULL_NAME else ""
     return render_template(
         "index.html",
         full_name=FULL_NAME,
+        first_name=first_name,
+        last_name=last_name,
         email=EMAIL,
         location=LOCATION,
         resume_url=RESUME_URL,
-        role_titles=ROLE_TITLES,
+        role_titles_json=json.dumps(ROLE_TITLES),
         bio=BIO,
         stats=STATS,
         skill_groups_about=SKILL_GROUPS_ABOUT,

@@ -941,7 +941,7 @@ footer p {
 
   <header id="header">
     <nav>
-      <a href="#" class="logo" style="font-family:'JetBrains Mono';font-weight:700;color:var(--accent-cyan);text-decoration:none;">{{ full_name.split()[-1] }}</a>
+      <a href="#" class="logo" style="font-family:'JetBrains Mono';font-weight:700;color:var(--accent-cyan);text-decoration:none;">{{ first_name }}</a>
       <div class="nav-right">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Toggle theme">
           <span class="theme-icon dark-icon">D</span>
@@ -981,7 +981,7 @@ footer p {
       <div class="hex-grid"></div>
       <div class="hero-content">
         <div class="terminal-label" data-depth="0.15">&gt; initializing portfolio.exe</div>
-        <h1 class="hero-name" data-depth="0.25">{{ full_name.split()[0] }} <span class="glow">{{ full_name.split()[-1] }}</span></h1>
+        <h1 class="hero-name" data-depth="0.25">{{ first_name }} <span class="glow">{{ last_name }}</span></h1>
         <div class="typewriter" data-depth="0.2" id="typewriter"></div>
         <p class="hero-bio" data-depth="0.1">{{ bio }}</p>
         <div class="hero-cta" data-depth="0.18">
@@ -1050,7 +1050,7 @@ footer p {
       <div class="skills-grid reveal">
         {% for group in skills_groups %}
         <div class="skill-card card-3d" data-tilt>
-          <h3 style="color:{{ group.accent }};margin-bottom:16px;font-size:16px;">{{ group.name }}</h3>
+          <h3 style="color: {{ group.accent }}; margin-bottom: 16px; font-size: 16px;">{{ group.name }}</h3>
           {% for skill, pct in group.skills %}
           <div class="skill-row">
             <span style="flex:0 0 120px;">{{ skill }}</span>
@@ -1190,7 +1190,7 @@ footer p {
     localStorage.setItem('portfolio-theme', document.body.classList.contains('theme-light') ? 'light' : 'dark');
   });
   const isTouch = window.matchMedia('(pointer: coarse)').matches;
-  const roleTitles = {{ role_titles | tojson }};
+  const roleTitles = {{ role_titles_json | safe }};
 
   // Typewriter
   const typewriterEl = document.getElementById('typewriter');
