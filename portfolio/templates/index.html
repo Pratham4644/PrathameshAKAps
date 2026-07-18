@@ -1146,70 +1146,7 @@ footer p {
       </div>
     </section>
 
-    <section id="live-demo">
-      <div class="section-label">// Live Demo</div>
-      <h2 class="section-title flip-in">Live Digit Classifier</h2>
-      <div class="card-3d" style="padding:20px; max-width:900px; margin:0 auto;">
-        <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:center; justify-content:center;">
-          <div style="text-align:center;">
-            <canvas id="digitCanvas" width="280" height="280" style="background:#071014; border-radius:8px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); touch-action: none;"></canvas>
-            <div style="margin-top:8px; display:flex; gap:8px; justify-content:center;">
-              <button id="clearBtn" class="btn-outline">Clear</button>
-              <button id="predictBtn" class="btn-primary">Predict</button>
-            </div>
-          </div>
-          <div style="min-width:280px;">
-            <div id="predictionResult" style="color:var(--text-secondary);">
-              <div id="predLabel" style="font-size:28px; font-weight:800; color:var(--accent-cyan); text-shadow:0 0 12px var(--glow);">—</div>
-              <div id="timeMs" style="font-family:'JetBrains Mono', monospace; color:var(--text-muted); margin-bottom:6px;">Inference: —</div>
-              <svg id="probsChart" width="280" height="220" viewBox="0 0 280 220"></svg>
-            </div>
-          </div>
-        </div>
-
-        <details style="margin-top:12px; color:var(--text-secondary);"><summary style="cursor:pointer">How this works</summary>
-          <div style="margin-top:8px;">This demo uses a RandomForest classifier trained on <code>sklearn.datasets.load_digits</code> (8x8 greyscale images). The model is trained offline with <code>train_digits.py</code> and loaded once at server startup. Test accuracy: <strong>{{ model_meta.accuracy if model_meta else 'N/A' }}</strong>.</div>
-        </details>
-      </div>
-
-      <script>
-      (function(){
-        const canvas = document.getElementById('digitCanvas');
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#071014'; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.strokeStyle = '#fff'; ctx.lineWidth = 22; ctx.lineCap = 'round';
-        let drawing = false;
-        function pointerDown(e){ drawing=true; ctx.beginPath(); const r=canvas.getBoundingClientRect(); ctx.moveTo((e.clientX||e.touches[0].clientX)-r.left, (e.clientY||e.touches[0].clientY)-r.top);} 
-        function pointerMove(e){ if(!drawing) return; const r=canvas.getBoundingClientRect(); ctx.lineTo((e.clientX||e.touches[0].clientX)-r.left, (e.clientY||e.touches[0].clientY)-r.top); ctx.stroke(); }
-        function pointerUp(){ drawing=false; }
-        canvas.addEventListener('pointerdown', pointerDown);
-        canvas.addEventListener('pointermove', pointerMove);
-        canvas.addEventListener('pointerup', pointerUp);
-        canvas.addEventListener('pointerleave', pointerUp);
-        document.getElementById('clearBtn').addEventListener('click', ()=>{ ctx.fillStyle='#071014'; ctx.fillRect(0,0,canvas.width,canvas.height); document.getElementById('predLabel').textContent='—'; document.getElementById('timeMs').textContent='Inference: —'; document.getElementById('probsChart').innerHTML=''; });
-        document.getElementById('predictBtn').addEventListener('click', async ()=>{
-          const data = canvas.toDataURL('image/png');
-          const t0 = performance.now();
-          const res = await fetch('/predict_digit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:data})});
-          const t1 = performance.now();
-          if(!res.ok){ alert('Prediction error'); return; }
-          const body = await res.json();
-          document.getElementById('predLabel').textContent = body.pred;
-          document.getElementById('timeMs').textContent = 'Inference: '+(body.time_ms?body.time_ms.toFixed(1):((t1-t0).toFixed(1)))+' ms';
-          const probs = body.probs || [];
-          const svg = document.getElementById('probsChart'); svg.innerHTML='';
-          const w = 260; const h = 180; const left = 10; const barW = w/10 - 6;
-          const maxP = Math.max(...probs);
-          probs.forEach((p,i)=>{
-            const x = left + i*(barW+6);
-            const barH = (p/maxP)* (h-30);
-            const rect = `<rect x='${x}' y='${h-barH}' width='${barW}' height='${barH}' fill='${i==body.pred?"var(--accent-cyan)":"#274249"}' />`;
-            const label = `<text x='${x+barW/2}' y='${h+14}' font-size='10' fill='var(--text-muted)' text-anchor='middle'>${i}</text>`;
-            const pct = `<text x='${x+barW/2}' y='${h-barH-6}' font-size='11' fill='var(--text-secondary)' text-anchor='middle'>${(p*100).toFixed(1)}%</text>`;
-            svg.innerHTML += rect + pct + label;
-          });
-        });
-      })();
+    <script>
       document.addEventListener('DOMContentLoaded', function(){
         const table = document.querySelector('.performance-table');
         if (!table) return;
