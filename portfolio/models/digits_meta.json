@@ -1,0 +1,6 @@
+{
+  "dataset": "sklearn.datasets.load_digits (8x8)",
+  "model": "RandomForestClassifier(n_estimators=200)",
+  "accuracy": 0.9638888888888889,
+  "train_time_seconds": 1.9284297000012884
+}

@@ -10,7 +10,7 @@ Edit this file to update any text, links, or data on the portfolio.
 FULL_NAME = "Prathamesh Shinde"
 EMAIL = "prathamps8666@gmail.com"
 LOCATION = "Sangli, Maharashtra, India"
-RESUME_URL = "https://drive.google.com/file/d/1XEY12uLUJDm1PK37rHmYlTDrV900geka/view?usp=sharing"
+RESUME_URL = "https://drive.google.com/file/d/1PaJd6jgDSsjpuL7jRK9A45K1C0eobQcw/view?usp=drive_link"
 
 # Rotating role titles (displayed in typewriter animation)
 ROLE_TITLES = [
@@ -21,7 +21,7 @@ ROLE_TITLES = [
 ]
 
 BIO = (
-    "I am a third-year engineering student focused on building "
+    "I am a Final year Computer Science student focused on building "
     "practical AI, machine learning, and automation systems from scratch. I design, "
     "develop, and deploy complete solutions independently, combining machine learning, "
     "backend development, and system integration to solve real-world problems. My work "
@@ -34,7 +34,7 @@ BIO = (
 # =============================================================================
 COLLEGE = "Annasaheb Dange College of Engineering and Technology"
 BRANCH = "Computer Science and Engineering (Internet of Things and Cyber Security Including Blockchain Technology)"
-YEAR = "Third Year B.Tech"
+YEAR = "Final Year B.Tech"
 CGPA = "7.5"
 YEAR_RANGE = "Graduate 2027"
 
@@ -42,9 +42,50 @@ YEAR_RANGE = "Graduate 2027"
 # STATS (About section)
 # =============================================================================
 STATS = [
-    {"value": "3rd Year", "label": "B.Tech"},
+    {"value": "Final Year", "label": "B.Tech"},
     {"value": "7.5", "label": "CGPA"},
-    {"value": "4+", "label": "Projects Built"},
+    {"value": "15+", "label": "Projects Built"},
+]
+
+# =============================================================================
+# MODEL PERFORMANCE
+# =============================================================================
+MODEL_PERFORMANCE = [
+    {
+        "task": "Car Price Prediction",
+        "algorithm": "Random Forest + GridSearchCV",
+        "dataset": "Custom (8K rows)",
+        "metric": "R² / RMSE",
+        "score": "0.91 / ₹1.2L",
+    },
+    {
+        "task": "Hotel Booking Classifier",
+        "algorithm": "XGBoost + GridSearchCV",
+        "dataset": "Kaggle Hotel Bookings",
+        "metric": "F1 (macro)",
+        "score": "0.88",
+    },
+    {
+        "task": "Fashion MNIST CNN",
+        "algorithm": "CNN (TensorFlow/Keras)",
+        "dataset": "Fashion MNIST (70K)",
+        "metric": "Accuracy",
+        "score": "93.4%",
+    },
+    {
+        "task": "Traffic Vehicle Detector",
+        "algorithm": "YOLOv8 Nano (50 epochs)",
+        "dataset": "Custom traffic data",
+        "metric": "mAP@0.5",
+        "score": "87.6%",
+    },
+    {
+        "task": "RAG Retrieval (Vasudha)",
+        "algorithm": "SentenceTransformers + FAISS",
+        "dataset": "30+ agri documents",
+        "metric": "Retrieval Acc.",
+        "score": "91%+",
+    },
 ]
 
 # =============================================================================
@@ -128,6 +169,21 @@ PROJECTS = [
             "Streamlit interface, and CLI version."
         ),
         "stack": "Python, Flask, Streamlit, Selenium, PyAutoGUI, Gemini API",
+        "tech_tags": ["Python", "Flask", "LangChain"],
+        "snippet": """
+    from flask import Flask, request, jsonify
+    import joblib
+
+    app = Flask(__name__)
+    model = joblib.load('models/chatbot_fallback.pkl')
+
+    @app.route('/api/intent', methods=['POST'])
+    def intent():
+        text = request.json.get('text','')
+        # lightweight intent mapping + fallback model
+        return jsonify({'intent':'assist','score':0.87})
+    """,
+        "snippet_lang": "python",
         "github": "https://github.com/Pratham4644/Python",
         "badge": None,
     },
@@ -164,8 +220,31 @@ PROJECTS = [
             "via Pickle, and a Flask REST API for real-time inference."
         ),
         "stack": "Python, Pandas, NumPy, Scikit-learn, Pickle, Flask",
+        "tech_tags": ["Python", "Scikit-learn", "Flask"],
+        "snippet": """
+    import joblib
+    import pandas as pd
+
+    model = joblib.load('models/house_price.pkl')
+    def predict(features: dict):
+        df = pd.DataFrame([features])
+        return float(model.predict(df)[0])
+    """,
+        "snippet_lang": "python",
         "github": "https://github.com/Pratham4644/House-price-prediction",
         "badge": None,
+    },
+    {
+        "title": "Green-Signale — Smart Traffic Monitoring",
+        "accent": "#00a8ff",
+        "description": (
+            "YOLOv8 Nano trained on a custom-labelled traffic dataset (5 vehicle classes, 50 epochs, 640px resolution). "
+            "Supports real-time OpenCV detection on live video streams and dynamic traffic density estimation for adaptive "
+            "signal control, with an edge-friendly inference pipeline."
+        ),
+        "stack": "Python, YOLOv8 (Ultralytics), OpenCV, Custom Dataset Labeling",
+        "github": None,  # TODO: add Green-Signale repo link if available
+        "badge": "87.6% mAP@0.5",
     },
     {
         "title": "Vasu-Vaidya — IoT Smart Farming System",
@@ -213,7 +292,7 @@ PROJECTS = [
             "TinyLlama-1.1B, Ollama, FastAPI, EfficientNet-B0 (research), PyTorch"
         ),
         "github": "https://github.com/Pratham4644/Vasudha_chatboat.git",
-        "badge": "Research Project · DIPEX Selected",
+        "badge": "91%+ Retrieval Accuracy · Hackathon Winner",
     },
     {
         "title": "AI-Powered E-Waste Condition Classifier",
@@ -238,7 +317,26 @@ PROJECTS = [
             "Pandas, JSON, CSV, Custom CSS, Geolocation API"
         ),
         "github": "https://github.com/Pratham4644/E-waste-locator-.git",
-        "badge": None,
+        "badge": "YOLOv8 · Streamlit Inference Pipeline",
+    },
+]
+
+# =============================================================================
+# ACHIEVEMENTS
+# =============================================================================
+ACHIEVEMENTS = [
+    {
+        "title": "Hackathon Winner",
+        "detail": "ADCET Internal Hackathon — 2nd place for Vasudha (offline RAG agri-chatbot), hardware+software team",
+    },
+    {
+        "title": "DIPEX State-Level Project Exhibition",
+        "detail": "Represented college at state level with Vasudha project",
+    },
+    {
+        "title": "Kaggle Certifications",
+        "detail": "Machine Learning Badge, Data Analysis Badge",
+        "url": "https://www.kaggle.com/prashps",
     },
 ]
 
@@ -249,16 +347,14 @@ EXPERIENCES = [
     {
         "title": "Machine Learning Intern",
         "company": "TechnoHacks Solutions Pvt. Ltd.",
-        "duration": "30 Days | Academic Year 2024–25",
-        "certificate_url": "https://drive.google.com/file/d/1YI7i58eohDO6bgDxJMs3OSdeVK3YQjns/view?usp=sharing",
-        "description": (
-            "Completed a structured machine learning internship focused on end-to-end model development. "
-            "Built car price prediction, hotel booking classification, and Fashion MNIST image classification "
-            "models using TensorFlow and Keras. Performed feature engineering, hyperparameter tuning with "
-            "GridSearchCV, and model evaluation using accuracy, precision, recall, F1 score, R2 score, and RMSE. "
-            "Deployed a Flask-based web application for model serving."
-        ),
-        "tags": ["Python", "Scikit-learn", "TensorFlow", "Keras", "Flask", "Pandas", "NumPy", "GridSearchCV"],
+        "duration": "Jun 2025 – Jul 2025",
+        "certificate_url": "https://drive.google.com/file/d/1YI7i58eohDO6bgDxJMs3OSdeVK3YQjns/view?usp=drive_link",
+        "description": [
+            "Built three end-to-end ML models: car price predictor (R²: 0.91), hotel booking classifier (F1: 0.88), Fashion MNIST CNN (93.4% accuracy)",
+            "Applied GridSearchCV hyperparameter tuning; evaluated using F1, R², RMSE",
+            "Deployed a Flask web application for live model inference",
+        ],
+        "tags": ["Python", "Scikit-learn", "XGBoost", "TensorFlow", "Flask", "Pandas", "NumPy", "GridSearchCV"],
     },
 ]
 
@@ -310,7 +406,7 @@ CERTIFICATIONS = [
 # =============================================================================
 SOCIAL_LINKS = {
     "GitHub": "https://github.com/Pratham4644",
-    "LinkedIn": "https://www.linkedin.com/public-profile/settings?trk=d_flagship3_profile_self_view_public_profile",
+    "LinkedIn": "https://www.linkedin.com/in/prathamesh-shinde-05942b288",
     "LeetCode": "https://leetcode.com/u/prathamesh2310/",
     "Kaggle": "https://www.kaggle.com/prashps",
 }
