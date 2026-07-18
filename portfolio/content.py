@@ -235,18 +235,6 @@ PROJECTS = [
         "badge": None,
     },
     {
-        "title": "Green-Signale — Smart Traffic Monitoring",
-        "accent": "#00a8ff",
-        "description": (
-            "YOLOv8 Nano trained on a custom-labelled traffic dataset (5 vehicle classes, 50 epochs, 640px resolution). "
-            "Supports real-time OpenCV detection on live video streams and dynamic traffic density estimation for adaptive "
-            "signal control, with an edge-friendly inference pipeline."
-        ),
-        "stack": "Python, YOLOv8 (Ultralytics), OpenCV, Custom Dataset Labeling",
-        "github": None,  # TODO: add Green-Signale repo link if available
-        "badge": "87.6% mAP@0.5",
-    },
-    {
         "title": "Vasu-Vaidya — IoT Smart Farming System",
         "accent": "#39ff14",
         "description": (
@@ -293,6 +281,22 @@ PROJECTS = [
         ),
         "github": "https://github.com/Pratham4644/Vasudha_chatboat.git",
         "badge": "91%+ Retrieval Accuracy · Hackathon Winner",
+    },
+    {
+        "title": "Green-Signale — Smart Traffic Monitoring",
+        "accent": "#39c5ff",
+        "description": (
+            "A real-time traffic monitoring system using YOLOv8 Nano trained "
+            "on a custom-labelled dataset covering 5 vehicle/object classes "
+            "(car, bus, truck, bike, person). Trained for 50 epochs at 640px "
+            "resolution, achieving 87.6% mAP@0.5. Deploys real-time detection "
+            "on live video streams via OpenCV, estimating per-frame traffic "
+            "density to enable adaptive signal control logic suitable for "
+            "edge deployment."
+        ),
+        "stack": "Python, YOLOv8 (Ultralytics), OpenCV, Custom Dataset",
+        "github": "https://github.com/Pratham4644/Green-Signale.git",
+        "badge": "87.6% mAP@0.5",
     },
     {
         "title": "AI-Powered E-Waste Condition Classifier",
