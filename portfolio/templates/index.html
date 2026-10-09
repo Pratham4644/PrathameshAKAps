@@ -371,29 +371,6 @@
       margin: 0 auto;
     }
 
-    /* Terminal badge */
-    .terminal-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--accent-emerald);
-      font-size: 13px;
-      margin-bottom: 24px;
-      padding: 8px 18px;
-      border-radius: 20px;
-      background: var(--bg-clay-floating);
-      border: 1px solid var(--clay-border);
-      box-shadow: var(--clay-bevel-light), var(--clay-bevel-dark), 0 6px 14px rgba(0, 0, 0, 0.3);
-      opacity: 0;
-      animation: heroFadeUp 0.6s ease forwards 0.1s;
-    }
-
-    .terminal-label::after {
-      content: '|';
-      animation: blink 1s step-end infinite;
-    }
-
     /* 3D Extruded Hero Typography */
     .hero-name {
       font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
@@ -663,12 +640,6 @@
       }
     }
 
-    @keyframes blink {
-      50% {
-        opacity: 0;
-      }
-    }
-
     @keyframes scrollBounce {
 
       0%,
@@ -691,18 +662,6 @@
       margin: 0 auto;
       position: relative;
       z-index: 1;
-    }
-
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--accent-emerald);
-      font-size: 13px;
-      margin-bottom: 12px;
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 12px;
-      background: rgba(52, 211, 153, 0.08);
-      border: 1px solid rgba(52, 211, 153, 0.15);
     }
 
     .section-title {
@@ -1339,8 +1298,6 @@
     <section class="hero">
       <canvas class="hero-canvas" id="heroCanvas"></canvas>
       <div class="hero-content">
-        <div class="terminal-label">// initializing 3d portfolio...</div>
-
         <!-- 3D Extruded Hero Name -->
         <h1 class="hero-name">{{ first_name }} <span class="glow">{{ last_name }}</span></h1>
 
@@ -1403,7 +1360,6 @@
 
     <!-- ABOUT SECTION -->
     <section id="about">
-      <div class="section-label">// 01. about</div>
       <h2 class="section-title flip-in">About Me</h2>
       <div class="about-layout reveal">
         <div>
@@ -1472,7 +1428,6 @@
 
     <!-- ACHIEVEMENTS SECTION -->
     <section id="achievements">
-      <div class="section-label">// Highlights</div>
       <h2 class="section-title flip-in">Achievements</h2>
       <div class="achievements-grid reveal" style="display:flex; gap:20px; flex-wrap:wrap;">
         {% for achievement in achievements %}
@@ -1493,7 +1448,6 @@
 
     <!-- SKILLS SECTION -->
     <section id="skills">
-      <div class="section-label">// 02. skills</div>
       <h2 class="section-title flip-in">Technical Stack</h2>
       <div class="skills-grid reveal">
         {% for group in skills_groups %}
@@ -1516,7 +1470,6 @@
 
     <!-- PROJECTS SECTION -->
     <section id="projects">
-      <div class="section-label">// 03. projects</div>
       <h2 class="section-title flip-in">Featured Projects</h2>
       <div class="projects-grid reveal">
         {% for project in projects %}
@@ -1560,7 +1513,6 @@
 
     <!-- EXPERIENCE SECTION -->
     <section id="experience">
-      <div class="section-label">// 04. experience</div>
       <h2 class="section-title flip-in">Work Experience</h2>
       <div class="timeline reveal">
         {% for exp in experiences %}
@@ -1593,7 +1545,6 @@
 
     <!-- EDUCATION SECTION -->
     <section id="education">
-      <div class="section-label">// 05. education</div>
       <h2 class="section-title flip-in">Education</h2>
       <div class="education-card clay-card card-3d reveal">
         <h3>{{ college }}</h3>
@@ -1608,7 +1559,6 @@
 
     <!-- CERTIFICATIONS SECTION -->
     <section id="certifications">
-      <div class="section-label">// 06. certifications</div>
       <h2 class="section-title flip-in">Certifications & Credentials</h2>
       <div class="certs-grid reveal">
         {% for cert in certifications %}
@@ -1628,7 +1578,6 @@
 
     <!-- CONTACT SECTION -->
     <section id="contact">
-      <div class="section-label">// 07. contact</div>
       <h2 class="section-title flip-in">Get In Touch</h2>
       <div class="contact-section reveal">
         <div class="clay-card">
