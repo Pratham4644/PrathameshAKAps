@@ -120,7 +120,12 @@ export default function ProjectDetails({ project, onClose }) {
             <div className="project-gallery">
               {gallery.map((image) => (
                 <figure key={image.src}>
-                  <img src={image.src} alt={image.alt} />
+                  <img
+                    src={image.src}
+                    alt={image.alt || `${project.title} screenshot`}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   {image.caption && <figcaption>{image.caption}</figcaption>}
                 </figure>
               ))}

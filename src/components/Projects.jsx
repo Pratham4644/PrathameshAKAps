@@ -35,7 +35,13 @@ function ProjectCard({ project, onSelect, reducedMotion }) {
     >
       <div className="card-glare" aria-hidden="true" />
       {coverImage ? (
-        <img className="project-image" src={coverImage} alt={`${project.title} project`} />
+        <img
+          className="project-image"
+          src={coverImage}
+          alt={`${project.title} project`}
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <div className="project-image project-image-placeholder" aria-hidden="true">
           <span>{project.category}</span>

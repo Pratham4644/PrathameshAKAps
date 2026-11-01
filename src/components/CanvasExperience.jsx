@@ -482,7 +482,7 @@ export default function CanvasExperience({ onReady, reducedMotion }) {
 
   return (
     <>
-      <div className="neural-canvas-layer">
+      <div className="neural-canvas-layer" aria-hidden="true">
         <Canvas
           dpr={mobile ? [1, 1] : [1, 1.5]}
           frameloop={isPageVisible ? "always" : "never"}

@@ -90,7 +90,7 @@ export default function Navbar() {
         <span style={{ width: `${scrollProgress}%` }} />
       </div>
       <header className={`nav-header${scrolled ? " nav-scrolled" : ""}${hidden ? " nav-hidden" : ""}`}>
-        <nav className="nav-inner">
+        <nav className="nav-inner" aria-label="Primary navigation">
           <a
             href="#hero"
             className="nav-logo"
@@ -148,7 +148,12 @@ export default function Navbar() {
       </header>
 
       {/* Mobile drawer */}
-      <nav id="mobile-navigation" aria-label="Mobile navigation" className={`mobile-menu${menuOpen ? " open" : ""}`}>
+      <nav
+        id="mobile-navigation"
+        aria-label="Mobile navigation"
+        aria-hidden={!menuOpen}
+        className={`mobile-menu${menuOpen ? " open" : ""}`}
+      >
         <div className="mobile-menu-inner">
           {NAV_LINKS.map((link, i) => (
             <a
