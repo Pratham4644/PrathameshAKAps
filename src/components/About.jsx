@@ -1,52 +1,26 @@
-import { useEffect, useRef } from "react";
-import { BIO, STATS, SKILL_GROUPS_ABOUT, COLLEGE, BRANCH, YEAR, CGPA, YEAR_RANGE } from "../data/content";
+import { BIO, STATS, SKILL_LEVELS, COLLEGE, BRANCH, YEAR, CGPA, YEAR_RANGE } from "../data/content";
 import { use3DTilt } from "../hooks/use3DTilt";
-
-function SkillBar({ name, percent, accent }) {
-  const barRef = useRef(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        const fill = entry.target.querySelector(".skill-fill");
-        if (fill) fill.style.width = `${percent}%`;
-      }
-    }, { threshold: 0.2 });
-    if (barRef.current) observer.observe(barRef.current);
-    return () => observer.disconnect();
-  }, [percent]);
-
-  return (
-    <div className="skill-bar-item" ref={barRef}>
-      <div className="skill-bar-header">
-        <span className="skill-bar-name">{name}</span>
-        <span className="skill-bar-pct" style={{ color: accent }}>{percent}%</span>
-      </div>
-      <div className="skill-bar-track">
-        <div className="skill-fill" style={{ background: accent, width: 0 }} />
-      </div>
-    </div>
-  );
-}
+import SectionReveal, { RevealGroup, RevealItem } from "./SectionReveal";
 
 export default function About() {
   const bioTilt = use3DTilt(10, 1100);
   const eduTilt = use3DTilt(10, 1100);
 
   return (
-    <section id="about" className="section section-about">
-      <div className="container">
-        <div className="section-header">
+    <SectionReveal id="about" className="section section-about">
+      <RevealGroup className="container">
+        <RevealItem className="section-header">
           <h2 className="section-title">
             About <span className="text-gradient">Me</span>
           </h2>
           <p className="section-subtitle">
             Bridging cutting-edge Deep Learning research with real-world, high-throughput production systems.
           </p>
-        </div>
+        </RevealItem>
 
-        <div className="about-grid">
+        <RevealGroup className="about-grid">
           {/* Left Column: Bio Card + Stats + Education */}
-          <div className="about-left-col">
+          <RevealItem className="about-left-col">
             <div
               ref={bioTilt.ref}
               onMouseMove={bioTilt.onMouseMove}
@@ -94,18 +68,25 @@ export default function About() {
                 </div>
               </div>
             </div>
-          </div>
+          </RevealItem>
 
           {/* Right Column: AI Capabilities & Technical Focus */}
-          <div className="about-right-col">
+          <RevealItem className="about-right-col">
             <div className="card-3d capabilities-card">
               <div className="card-header-simple">
-                <span className="tag-neural">CORE AI / ML PROFICIENCY</span>
-                <span className="mono-subtext">TELEMETRY_GAUGE</span>
+                <span className="tag-neural">TOOLS &amp; TECHNOLOGIES</span>
+                <span className="mono-subtext">BY EXPERIENCE</span>
               </div>
-              <div className="skill-bars-list">
-                {SKILL_GROUPS_ABOUT.map((sg) => (
-                  <SkillBar key={sg.name} {...sg} />
+              <div className="skill-level-list">
+                {SKILL_LEVELS.map((level) => (
+                  <div className="skill-level-row" key={level.name}>
+                    <h4 className="skill-level-title" style={{ color: level.accent }}>{level.name}</h4>
+                    <div className="skill-tag-list">
+                      {level.skills.map((skill) => (
+                        <span className="skill-tag" key={skill}>{skill}</span>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
 
@@ -127,9 +108,9 @@ export default function About() {
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
+          </RevealItem>
+        </RevealGroup>
+      </RevealGroup>
+    </SectionReveal>
   );
 }

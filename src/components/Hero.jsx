@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { FULL_NAME, ROLE_TITLES, BIO, SOCIAL_LINKS, RESUME_URL } from "../data/content";
-import ThreeNeuralScene from "./ThreeNeuralScene";
+import { FULL_NAME, ROLE_TITLES, BIO, SOCIAL_LINKS, RESUME_URL, PROOF_ITEMS } from "../data/content";
 import { use3DTilt } from "../hooks/use3DTilt";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import SectionReveal, { RevealGroup, RevealItem } from "./SectionReveal";
 
 const SOCIAL_ICONS = {
   GitHub: (
@@ -31,11 +32,16 @@ export default function Hero() {
   const [displayed, setDisplayed] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const timeoutRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
-  // 3D Tilt hook on the interactive telemetry card
   const tiltCard = use3DTilt(14, 1200);
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setDisplayed(ROLE_TITLES[0]);
+      return undefined;
+    }
+
     const currentRole = ROLE_TITLES[roleIdx];
     const speed = isDeleting ? 35 : 70;
     const pause = isDeleting ? 250 : displayed.length === currentRole.length ? 2200 : speed;
@@ -52,20 +58,18 @@ export default function Hero() {
       }
     }, pause);
     return () => clearTimeout(timeoutRef.current);
-  }, [displayed, isDeleting, roleIdx]);
+  }, [displayed, isDeleting, roleIdx, prefersReducedMotion]);
 
   const firstName = FULL_NAME.split(" ")[0];
   const lastName = FULL_NAME.split(" ").slice(1).join(" ");
 
   return (
-    <section id="hero" className="hero-section">
-      {/* 3D WebGL Neural Scene */}
-      <ThreeNeuralScene />
+    <SectionReveal id="hero" className="hero-section">
       <div className="hero-radial-vignette" />
 
-      <div className="hero-container">
+      <RevealGroup className="hero-container">
         {/* Left Column: Big Bold Typography & CTAs */}
-        <div className="hero-left">
+        <RevealItem className="hero-left">
           <div className="hero-status-pill">
             <span className="status-indicator-dot" />
             <span>AVAILABLE FOR AI / ML ROLES</span>
@@ -78,8 +82,8 @@ export default function Hero() {
 
           <div className="hero-typing-box">
             <span className="typing-prompt">&gt;</span>
-            <span className="typing-text">{displayed}</span>
-            <span className="typing-cursor"></span>
+            <span className="typing-text">{prefersReducedMotion ? ROLE_TITLES[0] : displayed}</span>
+            {!prefersReducedMotion && <span className="typing-cursor" />}
           </div>
 
           <p className="hero-description">{BIO}</p>
@@ -90,7 +94,9 @@ export default function Hero() {
               className="btn-3d btn-primary"
               onClick={(e) => {
                 e.preventDefault();
-                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+                document.getElementById("projects")?.scrollIntoView({
+                  behavior: prefersReducedMotion ? "auto" : "smooth",
+                });
               }}
             >
               <span>Explore Projects</span>
@@ -129,10 +135,10 @@ export default function Hero() {
               ))}
             </div>
           </div>
-        </div>
+        </RevealItem>
 
-        {/* Right Column: 3D Holographic AI Telemetry Card */}
-        <div className="hero-right">
+        {/* Right Column: verified project and internship proof */}
+        <RevealItem className="hero-right">
           <div
             ref={tiltCard.ref}
             onMouseMove={tiltCard.onMouseMove}
@@ -147,56 +153,35 @@ export default function Hero() {
                 <span className="dot dot-yellow" />
                 <span className="dot dot-green" />
               </div>
-              <span className="card-system-id">neural_core_v3.2 // LIVE</span>
+              <span className="card-system-id">PROJECTS // PROOF</span>
             </div>
 
             <div className="card-body">
-              <div className="telemetry-stat-row">
-                <div className="stat-label">FOCUS ARCHITECTURES</div>
-                <div className="stat-value text-cyan">Transformers • CNN • LLMs • Diffusion</div>
-              </div>
-
-              <div className="telemetry-stat-row">
-                <div className="stat-label">TOP PERFORMANCE METRIC</div>
-                <div className="stat-value text-emerald">98.4% Classification Accuracy</div>
-              </div>
-
-              <div className="telemetry-grid-2col">
-                <div className="telemetry-box">
-                  <span className="telemetry-num">15+</span>
-                  <span className="telemetry-caption">AI Systems Built</span>
-                </div>
-                <div className="telemetry-box">
-                  <span className="telemetry-num">&lt;45ms</span>
-                  <span className="telemetry-caption">Avg Inference Latency</span>
-                </div>
-              </div>
-
-              <div className="telemetry-signal-track">
-                <div className="signal-header">
-                  <span>TRAINING LOSS CONVERGENCE</span>
-                  <span className="signal-val">0.0124 (Optimal)</span>
-                </div>
-                <div className="signal-bar">
-                  <div className="signal-fill" style={{ width: "94%" }} />
-                </div>
+              <div className="proof-list">
+                {PROOF_ITEMS.map((item) => (
+                  <div className="proof-item" key={item.label}>
+                    <span className="proof-label">{item.label}</span>
+                    <span className="proof-detail">{item.detail}</span>
+                  </div>
+                ))}
               </div>
 
               <div className="card-footer-badge">
-                <span className="pulse-beacon" />
-                <span>PYTORCH • TENSORFLOW • HUGGINGFACE • OPENCV</span>
+                <span>Selected project and internship outcomes</span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </RevealItem>
+      </RevealGroup>
 
       <a
         href="#about"
         className="scroll-indicator-link"
         onClick={(e) => {
           e.preventDefault();
-          document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+          document.getElementById("about")?.scrollIntoView({
+            behavior: prefersReducedMotion ? "auto" : "smooth",
+          });
         }}
       >
         <span className="scroll-mouse">
@@ -204,6 +189,6 @@ export default function Hero() {
         </span>
         <span className="scroll-text">EXPLORE</span>
       </a>
-    </section>
+    </SectionReveal>
   );
 }

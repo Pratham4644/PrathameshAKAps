@@ -9,8 +9,9 @@ A brutalist dark, high-performance portfolio crafted with **React** and **Vite**
 - **Frontend**: [React 18](https://react.dev/), [Vite 5](https://vitejs.dev/)
 - **Styling**: Vanilla CSS design system with Dark Brutalist + Matrix Terminal theme
 - **Typography**: [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono), [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk), [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans)
-- **Visuals**: Dynamic neural/matrix canvas animation, glassmorphic HUD badges, responsive card grids
-- **Content**: Centralized data module in [`src/data/content.js`](file:///d:/port/PrathameshAKAps/src/data/content.js)
+- **Visuals**: Neural/matrix canvas animation, glassmorphic badges, responsive project cards
+- **Content**: Centralized data module in [`src/data/content.js`](src/data/content.js)
+- **Live demo**: TODO: add live demo URL
 
 ---
 

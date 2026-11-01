@@ -1,3 +1,4 @@
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -5,21 +6,65 @@ import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Experience from "./components/Experience";
 import Contact from "./components/Contact";
-import Cursor3D from "./components/Cursor3D";
+import CustomCursor from "./components/CustomCursor";
+import { useReducedMotion } from "./hooks/useReducedMotion";
+
+const CanvasExperience = lazy(() => import("./components/CanvasExperience"));
+
+function CanvasLoader({ progress = 0 }) {
+  return (
+    <div className="canvas-loader" role="status" aria-live="polite">
+      <span className="canvas-loader-label">INITIALIZING NEURAL SCENE</span>
+      <span className="canvas-loader-progress">loading model... {progress}%</span>
+      <span className="canvas-loader-track"><span style={{ width: `${progress}%` }} /></span>
+    </div>
+  );
+}
 
 export default function App() {
+  const prefersReducedMotion = useReducedMotion();
+  const [canvasProgress, setCanvasProgress] = useState(0);
+  const [showCanvasLoader, setShowCanvasLoader] = useState(true);
+  const loaderTimeout = useRef(0);
+
+  const onCanvasReady = useCallback(() => {
+    setCanvasProgress(100);
+    loaderTimeout.current = window.setTimeout(() => setShowCanvasLoader(false), 350);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) setShowCanvasLoader(false);
+  }, [prefersReducedMotion]);
+
+  useEffect(() => () => window.clearTimeout(loaderTimeout.current), []);
+
   return (
     <>
-      <Cursor3D />
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Contact />
-      </main>
+      <CustomCursor />
+      {prefersReducedMotion ? (
+        <div className="neural-static-fallback" aria-hidden="true" />
+      ) : (
+        <>
+          <Suspense fallback={<CanvasLoader />}>
+            <CanvasExperience
+              onReady={onCanvasReady}
+              reducedMotion={prefersReducedMotion}
+            />
+          </Suspense>
+          {showCanvasLoader && <CanvasLoader progress={canvasProgress} />}
+        </>
+      )}
+      <div className="app-content">
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Experience />
+          <Contact />
+        </main>
+      </div>
     </>
   );
 }

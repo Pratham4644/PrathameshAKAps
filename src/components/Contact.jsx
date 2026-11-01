@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { EMAIL, LOCATION, SOCIAL_LINKS, FULL_NAME } from "../data/content";
+import { useEffect, useRef, useState } from "react";
+import { EMAIL, LOCATION, SOCIAL_LINKS, FULL_NAME, RESUME_URL } from "../data/content";
 import { use3DTilt } from "../hooks/use3DTilt";
+import SectionReveal, { RevealGroup, RevealItem } from "./SectionReveal";
 
 const SOCIAL_ICONS = {
   GitHub: (
@@ -26,30 +27,42 @@ const SOCIAL_ICONS = {
 };
 
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const toastTimeout = useRef(0);
   const cardTilt = use3DTilt(10, 1100);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(EMAIL);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
+  useEffect(() => () => window.clearTimeout(toastTimeout.current), []);
+
+  const copyEmail = async () => {
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Clipboard access is unavailable in this browser.");
+      }
+      await navigator.clipboard.writeText(EMAIL);
+      setToastMessage("Email address copied.");
+    } catch {
+      setToastMessage("Could not copy the address. Select the email above to copy it.");
+    }
+
+    window.clearTimeout(toastTimeout.current);
+    toastTimeout.current = window.setTimeout(() => setToastMessage(""), 3200);
   };
 
   return (
-    <section id="contact" className="section section-contact">
-      <div className="container">
-        <div className="section-header">
+    <SectionReveal id="contact" className="section section-contact">
+      <RevealGroup className="container">
+        <RevealItem className="section-header">
           <h2 className="section-title">
             Let&apos;s <span className="text-gradient">Connect</span>
           </h2>
           <p className="section-subtitle">
             Open for full-time AI/ML Engineering roles, research collaborations, and production consulting.
           </p>
-        </div>
+        </RevealItem>
 
-        <div className="contact-grid-3d">
+        <RevealGroup className="contact-grid-3d">
           {/* Left Column: 3D Terminal Card */}
-          <div
+          <RevealItem
             ref={cardTilt.ref}
             onMouseMove={cardTilt.onMouseMove}
             onMouseEnter={cardTilt.onMouseEnter}
@@ -82,7 +95,18 @@ export default function Contact() {
             </div>
 
             <div className="contact-cta-area">
-              <button className="btn-3d btn-primary btn-copy-email" onClick={copyEmail}>
+              <a href={`mailto:${EMAIL}`} className="btn-3d btn-primary btn-contact-email">
+                Email me
+              </a>
+              <a
+                href={RESUME_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-3d btn-glass btn-contact-resume"
+              >
+                View resume ↗
+              </a>
+              <button type="button" className="btn-3d btn-glass btn-copy-email" onClick={copyEmail}>
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -94,20 +118,17 @@ export default function Contact() {
                   <rect x="9" y="9" width="13" height="13" rx="2" />
                   <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
                 </svg>
-                <span>{copied ? "✓ Copied to Clipboard!" : "Copy Email Address"}</span>
+                <span>Copy email</span>
               </button>
 
-              <a
-                href={`mailto:${EMAIL}`}
-                className="btn-3d btn-glass btn-send-email"
-              >
-                <span>Open Mail Client ↗</span>
-              </a>
             </div>
-          </div>
+            <p className="contact-toast" role="status" aria-live="polite">
+              {toastMessage}
+            </p>
+          </RevealItem>
 
           {/* Right Column: 3D Social Portals */}
-          <div className="social-portals-col">
+          <RevealItem className="social-portals-col">
             <h3 className="sub-heading-3d">DEVELOPER PROFILES</h3>
             <div className="social-portals-grid">
               {Object.entries(SOCIAL_LINKS).map(([name, url]) => (
@@ -127,9 +148,9 @@ export default function Contact() {
                 </a>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
+          </RevealItem>
+        </RevealGroup>
+      </RevealGroup>
 
       <footer className="footer-simple">
         <div className="container footer-content">
@@ -142,6 +163,6 @@ export default function Contact() {
           </div>
         </div>
       </footer>
-    </section>
+    </SectionReveal>
   );
 }

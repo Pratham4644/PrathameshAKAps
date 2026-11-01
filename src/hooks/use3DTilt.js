@@ -2,9 +2,17 @@ import { useRef, useCallback } from "react";
 
 export function use3DTilt(maxTilt = 12, perspective = 1000) {
   const ref = useRef(null);
+  const isTouchDevice = useCallback(
+    () => window.matchMedia("(hover: none), (pointer: coarse)").matches,
+    []
+  );
 
   const handleMouseMove = useCallback(
     (e) => {
+      if (
+        isTouchDevice() ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) return;
       const card = ref.current;
       if (!card) return;
 
@@ -21,21 +29,32 @@ export function use3DTilt(maxTilt = 12, perspective = 1000) {
       card.style.setProperty("--mouse-x", `${(x / rect.width) * 100}%`);
       card.style.setProperty("--mouse-y", `${(y / rect.height) * 100}%`);
     },
-    [maxTilt, perspective]
+    [isTouchDevice, maxTilt, perspective]
   );
 
   const handleMouseEnter = useCallback(() => {
+    if (
+      isTouchDevice() ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) return;
     const card = ref.current;
     if (!card) return;
     card.style.transition = "transform 0.15s ease-out, box-shadow 0.25s ease-out";
-  }, []);
+  }, [isTouchDevice]);
 
   const handleMouseLeave = useCallback(() => {
     const card = ref.current;
     if (!card) return;
+    if (
+      isTouchDevice() ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      card.style.transform = "";
+      return;
+    }
     card.style.transition = "transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease-out";
     card.style.transform = `perspective(${perspective}px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)`;
-  }, [perspective]);
+  }, [isTouchDevice, perspective]);
 
   return {
     ref,

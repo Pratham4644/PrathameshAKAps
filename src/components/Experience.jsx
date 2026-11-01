@@ -1,5 +1,6 @@
 import { MODEL_PERFORMANCE, ACHIEVEMENTS, EXPERIENCES, CERTIFICATIONS } from "../data/content";
 import { use3DTilt } from "../hooks/use3DTilt";
+import SectionReveal, { RevealGroup, RevealItem } from "./SectionReveal";
 
 function ExperienceCard({ exp }) {
   const tilt = use3DTilt(8, 1000);
@@ -52,18 +53,19 @@ function ExperienceCard({ exp }) {
 
 export default function Experience() {
   return (
-    <section id="experience" className="section section-experience">
-      <div className="container">
-        <div className="section-header">
+    <SectionReveal id="experience" className="section section-experience">
+      <RevealGroup className="container">
+        <RevealItem className="section-header">
           <h2 className="section-title">
             Experience &amp; <span className="text-gradient">Benchmarks</span>
           </h2>
           <p className="section-subtitle">
             Empirical validation, professional engagements, and state-level accolades.
           </p>
-        </div>
+        </RevealItem>
 
         {/* 3D Glass Model Benchmark Telemetry Table */}
+        <RevealItem>
         <div className="card-3d benchmark-card-3d">
           <div className="card-header-simple">
             <span className="tag-neural">EMPIRICAL BENCHMARKS &amp; ACCURACY MATRIX</span>
@@ -96,23 +98,26 @@ export default function Experience() {
             </table>
           </div>
         </div>
+        </RevealItem>
 
         {/* Professional Experience */}
-        <div className="experience-block">
+        <RevealItem className="experience-block">
           <h3 className="sub-heading-3d">INDUSTRY ENGAGEMENT</h3>
-          <div className="exp-list-container">
+          <RevealGroup className="exp-list-container">
             {EXPERIENCES.map((exp) => (
-              <ExperienceCard key={exp.company} exp={exp} />
+              <RevealItem key={exp.company}>
+                <ExperienceCard exp={exp} />
+              </RevealItem>
             ))}
-          </div>
-        </div>
+          </RevealGroup>
+        </RevealItem>
 
         {/* Honors & Hackathon Wins */}
-        <div className="achievements-block">
+        <RevealItem className="achievements-block">
           <h3 className="sub-heading-3d">HONORS &amp; COMPETITIONS</h3>
-          <div className="achievements-grid-3d">
+          <RevealGroup className="achievements-grid-3d">
             {ACHIEVEMENTS.map((ach, i) => (
-              <div key={ach.title} className="card-3d ach-card-3d">
+              <RevealItem key={ach.title} className="card-3d ach-card-3d">
                 <div className="card-glare" />
                 <div className="ach-top-meta">
                   <span className="ach-trophy">🏆</span>
@@ -130,33 +135,32 @@ export default function Experience() {
                     View Verification ↗
                   </a>
                 )}
-              </div>
+              </RevealItem>
             ))}
-          </div>
-        </div>
+          </RevealGroup>
+        </RevealItem>
 
         {/* Certifications */}
-        <div className="certifications-block">
+        <RevealItem className="certifications-block">
           <h3 className="sub-heading-3d">LICENSES &amp; CERTIFICATIONS</h3>
-          <div className="certs-grid-3d">
+          <RevealGroup className="certs-grid-3d">
             {CERTIFICATIONS.map((cert) => (
-              <a
+              <RevealItem
                 key={cert.title}
-                href={cert.url}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="cert-card-3d"
               >
-                <div className="cert-meta-row">
-                  <span className="cert-issuer-badge">{cert.issuer}</span>
-                  <span className="cert-arrow">↗</span>
-                </div>
-                <h4 className="cert-title-text">{cert.title}</h4>
-              </a>
+                <a href={cert.url} target="_blank" rel="noopener noreferrer">
+                  <div className="cert-meta-row">
+                    <span className="cert-issuer-badge">{cert.issuer}</span>
+                    <span className="cert-arrow">↗</span>
+                  </div>
+                  <h4 className="cert-title-text">{cert.title}</h4>
+                </a>
+              </RevealItem>
             ))}
-          </div>
-        </div>
-      </div>
-    </section>
+          </RevealGroup>
+        </RevealItem>
+      </RevealGroup>
+    </SectionReveal>
   );
 }

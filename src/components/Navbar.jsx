@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { RESUME_URL } from "../data/content";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -14,42 +15,93 @@ export default function Navbar() {
   const [active, setActive] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const lastY = useRef(0);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => {
+    const updateScrollState = () => {
       const y = window.scrollY;
       setScrolled(y > 25);
-      setHidden(y > lastY.current && y > 140);
+      setHidden(!menuOpen && y > lastY.current && y > 140);
       lastY.current = y;
-      const sections = NAV_LINKS.map((l) => l.href.replace("#", ""));
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && window.scrollY >= el.offsetTop - 140) {
-          setActive(sections[i]);
-          break;
-        }
-      }
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollableHeight > 0 ? Math.round((y / scrollableHeight) * 100) : 0;
+      setScrollProgress(Math.max(0, Math.min(100, progress)));
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    lastY.current = window.scrollY;
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+    const resizeObserver = new ResizeObserver(updateScrollState);
+    resizeObserver.observe(document.documentElement);
+    return () => {
+      window.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+      resizeObserver.disconnect();
+    };
+  }, [menuOpen]);
+
+  const updateActiveSection = useCallback(() => {
+    const sections = ["hero", ...NAV_LINKS.map((link) => link.href.slice(1))]
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    const focusLine = window.innerHeight * 0.35;
+    const currentSection = sections.find((section) => {
+      const bounds = section.getBoundingClientRect();
+      return bounds.top <= focusLine && bounds.bottom > focusLine;
+    });
+
+    if (currentSection) setActive(currentSection.id);
   }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(updateActiveSection, {
+      rootMargin: "-30% 0px -65% 0px",
+      threshold: 0,
+    });
+    const sections = ["hero", ...NAV_LINKS.map((link) => link.href.slice(1))]
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    sections.forEach((section) => observer.observe(section));
+    updateActiveSection();
+
+    return () => observer.disconnect();
+  }, [updateActiveSection]);
 
   const handleNav = (href) => {
     setMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    document.querySelector(href)?.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
   };
 
   return (
     <>
+      <div
+        className="scroll-progress-track"
+        role="progressbar"
+        aria-label="Page scroll progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow={scrollProgress}
+      >
+        <span style={{ width: `${scrollProgress}%` }} />
+      </div>
       <header className={`nav-header${scrolled ? " nav-scrolled" : ""}${hidden ? " nav-hidden" : ""}`}>
         <nav className="nav-inner">
           <a
             href="#hero"
             className="nav-logo"
+            aria-label="Go to page top"
+            aria-current={active === "hero" ? "location" : undefined}
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({
+                top: 0,
+                behavior: prefersReducedMotion ? "auto" : "smooth",
+              });
             }}
           >
             <span className="logo-symbol">&lt;PS /&gt;</span>
@@ -61,6 +113,7 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   className={`nav-link-item${active === link.href.replace("#", "") ? " is-active" : ""}`}
+                  aria-current={active === link.href.slice(1) ? "location" : undefined}
                   onClick={(e) => {
                     e.preventDefault();
                     handleNav(link.href);
@@ -85,6 +138,8 @@ export default function Navbar() {
               className={`hamburger${menuOpen ? " open" : ""}`}
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle navigation"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
             >
               <span /><span /><span />
             </button>
@@ -93,13 +148,14 @@ export default function Navbar() {
       </header>
 
       {/* Mobile drawer */}
-      <div className={`mobile-menu${menuOpen ? " open" : ""}`}>
+      <nav id="mobile-navigation" aria-label="Mobile navigation" className={`mobile-menu${menuOpen ? " open" : ""}`}>
         <div className="mobile-menu-inner">
           {NAV_LINKS.map((link, i) => (
             <a
               key={link.href}
               href={link.href}
               className="mobile-nav-link"
+              aria-current={active === link.href.slice(1) ? "location" : undefined}
               onClick={(e) => {
                 e.preventDefault();
                 handleNav(link.href);
@@ -118,7 +174,7 @@ export default function Navbar() {
             Download Resume ↗
           </a>
         </div>
-      </div>
+      </nav>
       {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
     </>
   );
