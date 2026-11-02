@@ -8,6 +8,10 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    watch: {
+      ignored: (filePath) =>
+        /PrathameshAKAps[/\\]idila_piano\.mp3$/i.test(filePath),
+    },
   },
   build: {
     rollupOptions: {

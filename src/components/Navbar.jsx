@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import AmbientAudio from "./AmbientAudio";
 import { NAV_LINKS, RESUME_URL } from "../data/content";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -73,6 +74,7 @@ export default function Navbar({ activeScene }) {
           ))}
         </ul>
         <div className="nav-right">
+          <AmbientAudio />
           <a href={RESUME_URL} className="btn-nav-resume" target="_blank" rel="noopener noreferrer">
             Resume
           </a>

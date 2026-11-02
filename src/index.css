@@ -369,6 +369,26 @@ h3 {
   gap: 12px;
 }
 
+.sound-toggle {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+}
+
+.sound-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sound-toggle[aria-pressed="true"] {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
 .btn-nav-resume {
   padding: 10px 18px;
   border: 1px solid var(--line);
