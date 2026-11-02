@@ -1,166 +1,81 @@
-import { MODEL_PERFORMANCE, ACHIEVEMENTS, EXPERIENCES, CERTIFICATIONS } from "../data/content";
-import { use3DTilt } from "../hooks/use3DTilt";
-import SectionReveal, { RevealGroup, RevealItem } from "./SectionReveal";
+/**
+ * Same stage as Projects: two cards left, two right, the figure stays
+ * in the middle. Click a card for the cinematic detail panel.
+ */
+import { useState } from "react";
+import SceneSection from "./SceneSection";
+import CinemaDetails from "./CinemaDetails";
+import { JOURNEY_ITEMS } from "../data/content";
 
-function ExperienceCard({ exp }) {
-  const tilt = use3DTilt(8, 1000);
+const STAGE_COUNT = 4;
+
+export default function Experience() {
+  const [showMore, setShowMore] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const staged = showMore ? JOURNEY_ITEMS : JOURNEY_ITEMS.slice(0, STAGE_COUNT);
+  const left = [];
+  const right = [];
+  staged.forEach((item, index) => {
+    if (index % 4 < 2) left.push(item);
+    else right.push(item);
+  });
+  const extraCount = JOURNEY_ITEMS.length - STAGE_COUNT;
+
   return (
-    <div
-      ref={tilt.ref}
-      onMouseMove={tilt.onMouseMove}
-      onMouseEnter={tilt.onMouseEnter}
-      onMouseLeave={tilt.onMouseLeave}
-      className="card-3d exp-card-3d"
-    >
-      <div className="card-glare" />
-      <div className="exp-card-header">
-        <div>
-          <h4 className="exp-role-title">{exp.title}</h4>
-          <p className="exp-company-name">{exp.company}</p>
+    <SceneSection id="experience">
+      <div className="projects-stage">
+        <header className="projects-head">
+          <p className="mono-label">04 — Journey</p>
+          <h2>
+            The <em className="accent-amber">road</em> so far
+          </h2>
+        </header>
+
+        <div className="projects-board">
+          <div className="projects-col">
+            {left.map((item) => (
+              <JourneyCard key={item.title} item={item} onSelect={setSelected} />
+            ))}
+          </div>
+          <div className="projects-gap" aria-hidden="true" />
+          <div className="projects-col">
+            {right.map((item) => (
+              <JourneyCard key={item.title} item={item} onSelect={setSelected} />
+            ))}
+          </div>
         </div>
-        <div className="exp-right-meta">
-          <span className="exp-duration-badge">{exp.duration}</span>
-          {exp.certificateUrl && (
-            <a
-              href={exp.certificateUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="exp-cert-btn"
-            >
-              Verify Credential ↗
-            </a>
-          )}
-        </div>
+
+        {extraCount > 0 && (
+          <button
+            type="button"
+            className="btn btn-ghost projects-more"
+            onClick={() => setShowMore((value) => !value)}
+          >
+            {showMore ? "Show fewer" : `More on the road (${extraCount})`}
+          </button>
+        )}
       </div>
-      <ul className="exp-points-list">
-        {exp.description.map((d, i) => (
-          <li key={i}>
-            <span className="exp-point-arrow">▹</span>
-            <span>{d}</span>
-          </li>
-        ))}
-      </ul>
-      <div className="exp-tags-cloud">
-        {exp.tags.map((t) => (
-          <span key={t} className="tech-badge">
-            {t}
-          </span>
-        ))}
-      </div>
-    </div>
+
+      {selected && (
+        <CinemaDetails item={selected} onClose={() => setSelected(null)} />
+      )}
+    </SceneSection>
   );
 }
 
-export default function Experience() {
+function JourneyCard({ item, onSelect }) {
   return (
-    <SectionReveal id="experience" className="section section-experience">
-      <RevealGroup className="container">
-        <RevealItem className="section-header">
-          <h2 className="section-title">
-            Experience &amp; <span className="text-gradient">Benchmarks</span>
-          </h2>
-          <p className="section-subtitle">
-            Empirical validation, professional engagements, and state-level accolades.
-          </p>
-        </RevealItem>
-
-        {/* 3D Glass Model Benchmark Telemetry Table */}
-        <RevealItem>
-        <div className="card-3d benchmark-card-3d">
-          <div className="card-header-simple">
-            <span className="tag-neural">EMPIRICAL BENCHMARKS &amp; ACCURACY MATRIX</span>
-            <span className="mono-subtext">VALIDATION_SPLIT_v2</span>
-          </div>
-          <div className="table-responsive">
-            <table className="benchmark-table">
-              <thead>
-                <tr>
-                  <th>TASK / DOMAIN</th>
-                  <th>ARCHITECTURE</th>
-                  <th>DATASET</th>
-                  <th>PRIMARY METRIC</th>
-                  <th>BENCHMARK RESULT</th>
-                </tr>
-              </thead>
-              <tbody>
-                {MODEL_PERFORMANCE.map((row) => (
-                  <tr key={row.task}>
-                    <td className="td-task">{row.task}</td>
-                    <td className="td-algo">{row.algorithm}</td>
-                    <td className="td-dataset">{row.dataset}</td>
-                    <td className="td-metric">{row.metric}</td>
-                    <td className="td-score">
-                      <span className="score-pill">{row.score}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        </RevealItem>
-
-        {/* Professional Experience */}
-        <RevealItem className="experience-block">
-          <h3 className="sub-heading-3d">INDUSTRY ENGAGEMENT</h3>
-          <RevealGroup className="exp-list-container">
-            {EXPERIENCES.map((exp) => (
-              <RevealItem key={exp.company}>
-                <ExperienceCard exp={exp} />
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </RevealItem>
-
-        {/* Honors & Hackathon Wins */}
-        <RevealItem className="achievements-block">
-          <h3 className="sub-heading-3d">HONORS &amp; COMPETITIONS</h3>
-          <RevealGroup className="achievements-grid-3d">
-            {ACHIEVEMENTS.map((ach, i) => (
-              <RevealItem key={ach.title} className="card-3d ach-card-3d">
-                <div className="card-glare" />
-                <div className="ach-top-meta">
-                  <span className="ach-trophy">🏆</span>
-                  <span className="ach-rank-tag">RANK #{i + 1}</span>
-                </div>
-                <h4 className="ach-title-text">{ach.title}</h4>
-                <p className="ach-desc-text">{ach.detail}</p>
-                {ach.url && (
-                  <a
-                    href={ach.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ach-link-btn"
-                  >
-                    View Verification ↗
-                  </a>
-                )}
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </RevealItem>
-
-        {/* Certifications */}
-        <RevealItem className="certifications-block">
-          <h3 className="sub-heading-3d">LICENSES &amp; CERTIFICATIONS</h3>
-          <RevealGroup className="certs-grid-3d">
-            {CERTIFICATIONS.map((cert) => (
-              <RevealItem
-                key={cert.title}
-                className="cert-card-3d"
-              >
-                <a href={cert.url} target="_blank" rel="noopener noreferrer">
-                  <div className="cert-meta-row">
-                    <span className="cert-issuer-badge">{cert.issuer}</span>
-                    <span className="cert-arrow">↗</span>
-                  </div>
-                  <h4 className="cert-title-text">{cert.title}</h4>
-                </a>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </RevealItem>
-      </RevealGroup>
-    </SectionReveal>
+    <button
+      type="button"
+      className="project-card"
+      onClick={() => onSelect(item)}
+    >
+      <div>
+        <span className="mono-label">{item.label}</span>
+        <h3>{item.title}</h3>
+        {item.metric && <p className="project-metric">{item.metric}</p>}
+      </div>
+      <span className="project-card-arrow" aria-hidden="true">→</span>
+    </button>
   );
 }

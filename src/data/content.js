@@ -13,7 +13,7 @@ export const ROLE_TITLES = [
 ];
 
 export const BIO =
-  "I am a Final year Computer Science student focused on building practical AI, machine learning, and automation systems from scratch. I design, develop, and deploy complete solutions independently, combining machine learning, backend development, and system integration to solve real-world problems. My work centers on intelligent automation, scalable software products, and real-world execution rather than academic theory.";
+  "Final-year B.Tech CSE student at ADCET, Sangli. I build computer vision, offline RAG, and edge AI systems that work without the cloud.";
 
 export const COLLEGE = "Annasaheb Dange College of Engineering and Technology";
 export const BRANCH =
@@ -79,14 +79,16 @@ export const PROJECTS = [
     title: "FatigueGuard",
     category: "CV",
     featured: true,
+    publicOk: true,
     image: "",
     demo: "",
-    problem: "TODO: add project problem statement",
-    approach: "TODO: add project approach",
+    // TODO confirm problem/approach wording with project write-up
+    problem: "Heavy-machinery operators need fatigue detection that still works offline.",
+    approach: "Offline edge-AI fatigue detection for heavy-machinery operators.",
     result: "TODO: add metric",
     accent: "#ff6b6b",
-    description: "TODO: add project description",
-    stack: "TODO: add tech stack",
+    description: "Offline edge-AI fatigue detection for heavy-machinery operators.",
+    stack: "",
     github: "",
     badge: null,
   },
@@ -94,14 +96,16 @@ export const PROJECTS = [
     title: "SentinelEdge",
     category: "IoT/Edge",
     featured: true,
+    publicOk: true,
     image: "",
     demo: "",
-    problem: "TODO: add project problem statement",
-    approach: "TODO: add project approach",
+    // TODO confirm problem/approach wording with project write-up
+    problem: "Predict equipment failures without depending on a cloud connection.",
+    approach: "Offline predictive maintenance, built for a TATA hackathon.",
     result: "TODO: add metric",
     accent: "#00e5ff",
-    description: "TODO: add project description",
-    stack: "TODO: add tech stack",
+    description: "Offline predictive maintenance system built for a TATA hackathon.",
+    stack: "",
     github: "",
     badge: null,
   },
@@ -109,29 +113,54 @@ export const PROJECTS = [
     title: "Face-Recognition Attendance",
     category: "CV",
     featured: true,
+    publicOk: true,
     image: "",
     demo: "",
-    problem: "TODO: add project problem statement",
-    approach: "TODO: add project approach",
+    // TODO confirm problem/approach wording with project write-up
+    problem: "Mark attendance from a webcam or CCTV without a cloud face API.",
+    approach: "InsightFace SCRFD detector with ArcFace embeddings.",
     result: "TODO: add metric",
     accent: "#7b61ff",
-    description: "TODO: add project description",
-    stack: "TODO: add tech stack",
+    description: "Webcam and CCTV attendance using InsightFace SCRFD and ArcFace.",
+    stack: "InsightFace, SCRFD, ArcFace",
     github: "",
     badge: null,
+  },
+  {
+    title: "Green-Signale — Smart Traffic Monitoring",
+    category: "CV",
+    featured: true,
+    publicOk: true,
+    image: "",
+    demo: "",
+    problem: "Detect vehicles and estimate traffic density from live video.",
+    approach: "Run YOLOv8 Nano detections on video streams with OpenCV.",
+    result: "87.6% mAP@0.5.",
+    accent: "#39c5ff",
+    description: "A real-time traffic monitoring system using YOLOv8 Nano trained on a custom-labelled dataset covering 5 vehicle/object classes (car, bus, truck, bike, person). Trained for 50 epochs at 640px resolution, achieving 87.6% mAP@0.5. Deploys real-time detection on live video streams via OpenCV, estimating per-frame traffic density to enable adaptive signal control logic suitable for edge deployment.",
+    stack: "Python, YOLOv8 (Ultralytics), OpenCV, Custom Dataset",
+    github: "https://github.com/Pratham4644/Green-Signale.git",
+    badge: "87.6% mAP@0.5",
+    architecture: [
+      "Train YOLOv8 Nano on a custom-labelled dataset of five vehicle and road-user classes.",
+      "Run detections on live video streams with OpenCV.",
+      "Estimate traffic density per frame to inform adaptive signal-control logic.",
+    ],
   },
   {
     title: "Multi-Camera Person Tracking",
     category: "CV",
     featured: true,
+    publicOk: false,
     image: "",
     demo: "",
-    problem: "TODO: add project problem statement",
-    approach: "TODO: add project approach",
+    // TODO confirm before setting publicOk true
+    problem: "Keep one identity for a person across four cameras.",
+    approach: "Person ReID with global IDs across four cameras.",
     result: "TODO: add metric",
     accent: "#39c5ff",
-    description: "TODO: add project description",
-    stack: "TODO: add tech stack",
+    description: "Four-camera person tracking with ReID and global IDs.",
+    stack: "",
     github: "",
     badge: null,
   },
@@ -238,26 +267,6 @@ export const PROJECTS = [
     ],
   },
   {
-    title: "Green-Signale — Smart Traffic Monitoring",
-    category: "CV",
-    featured: false,
-    image: "",
-    demo: "",
-    problem: "Detect vehicles and estimate traffic density from live video.",
-    approach: "Run YOLOv8 Nano detections on video streams with OpenCV.",
-    result: "87.6% mAP@0.5.",
-    accent: "#39c5ff",
-    description: "A real-time traffic monitoring system using YOLOv8 Nano trained on a custom-labelled dataset covering 5 vehicle/object classes (car, bus, truck, bike, person). Trained for 50 epochs at 640px resolution, achieving 87.6% mAP@0.5. Deploys real-time detection on live video streams via OpenCV, estimating per-frame traffic density to enable adaptive signal control logic suitable for edge deployment.",
-    stack: "Python, YOLOv8 (Ultralytics), OpenCV, Custom Dataset",
-    github: "https://github.com/Pratham4644/Green-Signale.git",
-    badge: "87.6% mAP@0.5",
-    architecture: [
-      "Train YOLOv8 Nano on a custom-labelled dataset of five vehicle and road-user classes.",
-      "Run detections on live video streams with OpenCV.",
-      "Estimate traffic density per frame to inform adaptive signal-control logic.",
-    ],
-  },
-  {
     title: "AI-Powered E-Waste Condition Classifier",
     category: "CV",
     featured: false,
@@ -324,9 +333,204 @@ export const CERTIFICATIONS = [
   { title: "Avishkar Hackathon Participation", issuer: "Annasaheb Dange College of Engineering and Technology", url: "https://drive.google.com/file/d/1YI7i58eohDO6bgDxJMs3OSdeVK3YQjns/view?usp=sharing", isAchievement: true, accent: "#7b61ff" },
 ];
 
+export const JOURNEY_ITEMS = [
+  {
+    title: "Machine Learning Intern",
+    label: "Internship",
+    metric: EXPERIENCES[0].duration,
+    description: `${EXPERIENCES[0].company} — built three end-to-end models and deployed a Flask app for live inference.`,
+    list: EXPERIENCES[0].description,
+    tags: EXPERIENCES[0].tags,
+    links: [{ label: "Verify credential", href: EXPERIENCES[0].certificateUrl, primary: true }],
+  },
+  {
+    title: "ADCET Internal Hackathon",
+    label: "Honor",
+    metric: "2nd place",
+    description: ACHIEVEMENTS[0].detail,
+    list: [],
+    tags: ["Vasudha", "Offline RAG"],
+    links: [],
+  },
+  {
+    title: "DIPEX Exhibition",
+    label: "Exhibition",
+    metric: "State level",
+    description: ACHIEVEMENTS[1].detail,
+    list: [],
+    tags: ["Vasudha"],
+    links: [],
+  },
+  {
+    title: "Kaggle badges",
+    label: "Certificates",
+    metric: "ML + Data",
+    description: ACHIEVEMENTS[2].detail,
+    list: [],
+    tags: ["Machine Learning", "Data"],
+    links: [{ label: "View badges", href: ACHIEVEMENTS[2].url, primary: true }],
+  },
+  ...CERTIFICATIONS.map((cert) => ({
+    title: cert.title,
+    label: cert.isAchievement ? "Hackathon" : "Certificate",
+    metric: cert.issuer,
+    description: `${cert.title} — ${cert.issuer}.`,
+    list: [],
+    tags: [cert.issuer],
+    links: cert.url ? [{ label: "View", href: cert.url, primary: true }] : [],
+  })),
+];
+
 export const SOCIAL_LINKS = {
   GitHub: "https://github.com/Pratham4644",
   LinkedIn: "https://www.linkedin.com/in/prathamesh-shinde-05942b288",
   LeetCode: "https://leetcode.com/u/prathamesh2310/",
   Kaggle: "https://www.kaggle.com/prashps",
 };
+
+export const ROTATING_LINES = [
+  "Computer vision",
+  "RAG & LLM systems",
+  "Edge AI",
+];
+
+export const HERO_PROOF = [
+  "2nd place — ADCET Hackathon",
+  "87.6% mAP — traffic detector",
+  "91%+ retrieval — Vasudha RAG",
+];
+
+export const ABOUT_PARAS = [
+  "I am a final-year CSE student who ships complete systems: detectors, retrievers, and offline models.",
+  "I care about work that still runs when the network drops — cameras, RAG, and edge devices.",
+];
+
+export const ABOUT_GLANCE = [
+  { label: "Education", value: "B.Tech CSE, ADCET, graduating 2027" },
+  { label: "Focus", value: "Computer vision, RAG, edge AI" },
+  { label: "Based in", value: "Sangli, Maharashtra" },
+  { label: "CGPA", value: CGPA },
+];
+
+/*
+  Skill levels — edit these freely.
+  daily    = filled cyan tag
+  project  = outline tag
+  learning = dashed outline tag
+*/
+export const SKILL_GROUPS = [
+  {
+    title: "Computer Vision",
+    tags: [
+      { name: "Python", level: "daily" },
+      { name: "OpenCV", level: "project" },
+      { name: "YOLO (Ultralytics)", level: "project" },
+      { name: "InsightFace", level: "project" },
+      { name: "PyTorch", level: "project" },
+      { name: "TensorFlow/Keras", level: "learning" },
+    ],
+  },
+  {
+    title: "LLM & RAG",
+    tags: [
+      { name: "FAISS", level: "project" },
+      { name: "Sentence-Transformers", level: "project" },
+      { name: "Ollama", level: "project" },
+      { name: "LangChain", level: "project" },
+    ],
+  },
+  {
+    title: "ML foundations",
+    tags: [
+      { name: "NumPy", level: "daily" },
+      { name: "Pandas", level: "daily" },
+      { name: "Scikit-learn", level: "daily" },
+    ],
+  },
+  {
+    title: "Backend & tools",
+    tags: [
+      { name: "FastAPI", level: "project" },
+      { name: "Flask", level: "daily" },
+      { name: "Node.js", level: "project" },
+      { name: "SQLite", level: "project" },
+      { name: "MQTT", level: "project" },
+      { name: "Streamlit", level: "project" },
+      { name: "Git/GitHub", level: "daily" },
+    ],
+  },
+];
+
+export const NAV_LINKS = [
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
+  { label: "Contact", href: "#contact" },
+];
+
+export const SCENES = [
+  {
+    id: "hero",
+    n: 1,
+    image: "Page_1.webp",
+    side: "left",
+    focus: [0.64, 0.55],
+    figureTarget: [0.7, 0.55],
+    alt: "A lone figure standing at a bright shore",
+    description: "Hero scene: a person stands at the water's edge under a pale sky.",
+  },
+  {
+    id: "about",
+    n: 2,
+    image: "Page_2.webp",
+    side: "right",
+    focus: [0.33, 0.62],
+    figureTarget: [0.3, 0.6],
+    alt: "A lone figure at dusk by the water",
+    description: "About scene: a person stands by dark water at dusk.",
+  },
+  {
+    id: "skills",
+    n: 3,
+    image: "Page_3.webp",
+    side: "right",
+    focus: [0.22, 0.58],
+    figureTarget: [0.22, 0.58],
+    alt: "A lone figure looking over a vast sea",
+    description: "Skills scene: a person looks out over a wide sea.",
+  },
+  {
+    id: "projects",
+    n: 4,
+    image: "Page_4.webp",
+    side: "split",
+    focus: [0.5, 0.45],
+    figureTarget: [0.5, 0.48],
+    alt: "A lone figure crossing a barren flat",
+    description: "Projects scene: a person walks across a flat, open landscape.",
+  },
+  {
+    id: "experience",
+    n: 5,
+    image: "Page_5.webp",
+    side: "split",
+    focus: [0.57, 0.65],
+    figureTarget: [0.5, 0.55],
+    alt: "A long misty road with a small figure ahead",
+    description: "Experience scene: a misty road stretches forward with a small figure on it.",
+  },
+  {
+    id: "contact",
+    n: 6,
+    image: "Page_6.webp",
+    side: "right",
+    focus: [0.18, 0.55],
+    figureTarget: [0.2, 0.55],
+    alt: "A lone figure signalling the sky with a flashlight",
+    description: "Contact scene: a person stands in a field and signals upward with a light.",
+  },
+];
+
+export const visibleProjects = () =>
+  PROJECTS.filter((project) => project.publicOk !== false);

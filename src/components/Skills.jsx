@@ -1,32 +1,40 @@
-import { SKILL_LEVELS } from "../data/content";
-import SectionReveal, { RevealGroup, RevealItem } from "./SectionReveal";
+import SceneSection from "./SceneSection";
+import { SKILL_GROUPS } from "../data/content";
+
+const LEVEL_CLASS = {
+  daily: "tag-daily",
+  project: "tag-project",
+  learning: "tag-learning",
+};
 
 export default function Skills() {
   return (
-    <SectionReveal id="skills" className="section section-skills">
-      <RevealGroup className="container">
-        <RevealItem className="section-header">
-          <h2 className="section-title">
-            Skills &amp; <span className="text-gradient">Tech Stack</span>
-          </h2>
-          <p className="section-subtitle">
-            Battle-tested frameworks, neural architectures, and computational toolkits.
-          </p>
-        </RevealItem>
-
-        <RevealGroup className="skills-levels-grid">
-          {SKILL_LEVELS.map((level) => (
-            <RevealItem as="section" className="skills-level-card" key={level.name}>
-              <h3 className="skills-level-title" style={{ color: level.accent }}>{level.name}</h3>
-              <div className="skill-tag-list">
-                {level.skills.map((skill) => (
-                  <span className="skill-tag" key={skill}>{skill}</span>
+    <SceneSection id="skills">
+      <article className="scene-copy">
+        <p className="mono-label">02 — Skills</p>
+        <h2>
+          Tools I <em className="accent-amber">think with</em>
+        </h2>
+        <div className="skill-legend" aria-label="Skill level legend">
+          <span className="chip tag-daily">Daily use</span>
+          <span className="chip tag-project">Used in projects</span>
+          <span className="chip tag-learning">Learning</span>
+        </div>
+        <div className="skills-grid">
+          {SKILL_GROUPS.map((group) => (
+            <div className="skill-card" key={group.title}>
+              <h3>{group.title}</h3>
+              <div className="skill-tags">
+                {group.tags.map((tag) => (
+                  <span key={tag.name} className={`chip ${LEVEL_CLASS[tag.level]}`}>
+                    {tag.name}
+                  </span>
                 ))}
               </div>
-            </RevealItem>
+            </div>
           ))}
-        </RevealGroup>
-      </RevealGroup>
-    </SectionReveal>
+        </div>
+      </article>
+    </SceneSection>
   );
 }

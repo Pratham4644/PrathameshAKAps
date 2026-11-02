@@ -1,5 +1,11 @@
+/**
+ * Cinematic project view: letterbox bars and a wide panel rise over the
+ * photo so you can read the full story without leaving the scene.
+ */
 import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
+
+const hasContent = (value) => value && !String(value).startsWith("TODO:");
 
 export default function ProjectDetails({ project, onClose }) {
   const dialogRef = useRef(null);
@@ -55,21 +61,28 @@ export default function ProjectDetails({ project, onClose }) {
     : project.image
       ? [{ src: project.image, alt: `${project.title} screenshot` }]
       : [];
-  const hasContent = (value) => value && !value.startsWith("TODO:");
-  const stack = project.stack
-    .split(", ")
-    .filter((technology) => !technology.startsWith("TODO:"));
+  const stack = String(project.stack || "")
+    .split(",")
+    .map((technology) => technology.trim())
+    .filter((technology) => technology && !technology.startsWith("TODO:"));
+  const facts = [
+    ["Problem", project.problem],
+    ["Approach", project.approach],
+    ["Result", project.result],
+  ].filter(([, value]) => hasContent(value));
 
   return createPortal(
     <div
-      className="project-dialog-backdrop"
+      className="cinema-backdrop"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
     >
+      <div className="cinema-letterbox cinema-letterbox-top" aria-hidden="true" />
+      <div className="cinema-letterbox cinema-letterbox-bottom" aria-hidden="true" />
       <section
         ref={dialogRef}
-        className="project-dialog"
+        className="cinema-panel"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -84,39 +97,32 @@ export default function ProjectDetails({ project, onClose }) {
         >
           ×
         </button>
-        <span className="project-category">{project.category}</span>
+        <p className="mono-label">{project.category}</p>
         <h2 id={titleId}>{project.title}</h2>
         {hasContent(project.description) && (
           <p className="project-dialog-description">{project.description}</p>
         )}
-
-        <dl className="project-proof-details">
-          {[
-            ["Problem", project.problem],
-            ["Approach", project.approach],
-            ["Result", project.result],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <dt>{label}</dt>
-              <dd>{hasContent(value) ? value : "Details coming soon."}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <section className="project-dialog-section" aria-labelledby={`${titleId}-architecture`}>
-          <h3 id={`${titleId}-architecture`}>Architecture</h3>
-          <ul>
-            {project.architecture?.length ? (
-              project.architecture.map((item) => <li key={item}>{item}</li>)
-            ) : (
-              <li>Architecture details coming soon.</li>
-            )}
-          </ul>
-        </section>
-
-        <section className="project-dialog-section" aria-labelledby={`${titleId}-gallery`}>
-          <h3 id={`${titleId}-gallery`}>Screenshots</h3>
-          {gallery.length ? (
+        {facts.length > 0 && (
+          <dl className="cinema-facts">
+            {facts.map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        {project.architecture?.length > 0 && (
+          <section className="project-dialog-section" aria-labelledby={`${titleId}-architecture`}>
+            <h3 id={`${titleId}-architecture`}>Architecture</h3>
+            <ul>
+              {project.architecture.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+          </section>
+        )}
+        {gallery.length > 0 && (
+          <section className="project-dialog-section" aria-labelledby={`${titleId}-gallery`}>
+            <h3 id={`${titleId}-gallery`}>Screenshots</h3>
             <div className="project-gallery">
               {gallery.map((image) => (
                 <figure key={image.src}>
@@ -126,15 +132,11 @@ export default function ProjectDetails({ project, onClose }) {
                     loading="lazy"
                     decoding="async"
                   />
-                  {image.caption && <figcaption>{image.caption}</figcaption>}
                 </figure>
               ))}
             </div>
-          ) : (
-            <p>Screenshots coming soon.</p>
-          )}
-        </section>
-
+          </section>
+        )}
         {stack.length > 0 && (
           <div className="project-tags-cloud">
             {stack.map((technology) => (
@@ -142,17 +144,16 @@ export default function ProjectDetails({ project, onClose }) {
             ))}
           </div>
         )}
-
         {(project.github || project.demo) && (
           <div className="project-dialog-actions">
             {project.github && (
-              <a href={project.github} target="_blank" rel="noopener noreferrer" className="project-github-btn">
-                Source ↗
+              <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                Source
               </a>
             )}
             {project.demo && (
-              <a href={project.demo} target="_blank" rel="noopener noreferrer" className="project-github-btn">
-                Demo ↗
+              <a href={project.demo} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                Demo
               </a>
             )}
           </div>

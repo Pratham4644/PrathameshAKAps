@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Local ML cache for scene prep (weights, not site assets)
+scripts/.cache/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

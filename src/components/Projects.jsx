@@ -1,199 +1,114 @@
-import { useCallback, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { PROJECTS } from "../data/content";
-import { useReducedMotion } from "../hooks/useReducedMotion";
+/**
+ * Four compact cards sit on the left and right so the figure stays in the
+ * middle of the photo. Extra projects drop into the same two columns later.
+ * A click opens a wide cinematic panel instead of covering the whole page.
+ */
+import { useMemo, useState } from "react";
+import SceneSection from "./SceneSection";
 import ProjectDetails from "./ProjectDetails";
-import SectionReveal, { RevealGroup, RevealItem } from "./SectionReveal";
+import { visibleProjects } from "../data/content";
 
 const FILTERS = ["All", "CV", "RAG/LLM", "IoT/Edge", "Web"];
+const STAGE_COUNT = 4;
 
-function ProjectCard({ project, onSelect, reducedMotion }) {
-  const coverImage = project.image || project.gallery?.[0]?.src;
-  const metric = project.badge || (
-    project.result && !project.result.startsWith("TODO:")
-      ? project.result
-      : "Metric not published"
-  );
-  const stack = project.stack
-    .split(", ")
-    .filter((technology) => !technology.startsWith("TODO:"));
-  const details = [
-    ["Problem", project.problem],
-    ["Approach", project.approach],
-    ["Result", project.result],
-  ];
+function realText(value) {
+  return value && !String(value).startsWith("TODO:") ? value : "";
+}
 
-  return (
-    <motion.article
-      layout
-      initial={reducedMotion ? false : { opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={reducedMotion ? undefined : { opacity: 0, y: -12 }}
-      transition={{ duration: reducedMotion ? 0 : 0.24, ease: "easeOut" }}
-      className="card-3d project-card-3d"
-      style={{ "--project-accent": project.accent }}
-    >
-      <div className="card-glare" aria-hidden="true" />
-      {coverImage ? (
-        <img
-          className="project-image"
-          src={coverImage}
-          alt={`${project.title} project`}
-          loading="lazy"
-          decoding="async"
-        />
-      ) : (
-        <div className="project-image project-image-placeholder" aria-hidden="true">
-          <span>{project.category}</span>
-          <strong>{project.title}</strong>
-        </div>
-      )}
-
-      <div className="project-card-content">
-        <div className="project-card-title-row">
-          <div className="project-title-group">
-            <span className="project-category">{project.category}</span>
-            <h3 className="project-title-text">{project.title}</h3>
-          </div>
-        </div>
-        <p className="project-metric-badge" title={metric}>{metric}</p>
-
-        <dl className="project-proof-details">
-          {details.map(([label, value]) => (
-            <div key={label}>
-              <dt>{label}</dt>
-              <dd>{value && !value.startsWith("TODO:") ? value : "Details coming soon."}</dd>
-            </div>
-          ))}
-        </dl>
-
-        {stack.length > 0 && (
-          <div className="project-tags-cloud" aria-label="Technologies">
-            {stack.map((technology) => (
-              <span key={technology} className="tech-badge">{technology}</span>
-            ))}
-          </div>
-        )}
-
-        <div className="project-card-footer">
-          <div className="project-actions">
-            <div className="project-links">
-              {project.github && (
-                <a href={project.github} target="_blank" rel="noopener noreferrer" className="project-github-btn">
-                  Source ↗
-                </a>
-              )}
-              {project.demo && (
-                <a href={project.demo} target="_blank" rel="noopener noreferrer" className="project-github-btn">
-                  Demo ↗
-                </a>
-              )}
-            </div>
-            <button type="button" className="btn-toggle-details" onClick={() => onSelect(project)}>
-              Details
-              <span aria-hidden="true"> ↗</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </motion.article>
-  );
+function shortTitle(title) {
+  return title.split("—")[0].trim();
 }
 
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [showMoreProjects, setShowMoreProjects] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const reducedMotion = useReducedMotion();
-  const closeDetails = useCallback(() => setSelectedProject(null), []);
-  const matchesFilter = (project) => activeFilter === "All" || project.category === activeFilter;
-  const featuredProjects = PROJECTS.filter((project) => project.featured && matchesFilter(project));
-  const olderProjects = PROJECTS.filter((project) => !project.featured && matchesFilter(project));
-  const visibleProjects = showMoreProjects
-    ? [...featuredProjects, ...olderProjects]
-    : featuredProjects;
+  const [filter, setFilter] = useState("All");
+  const [showMore, setShowMore] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const projects = visibleProjects();
 
-  const selectFilter = (filter) => {
-    setActiveFilter(filter);
-    setShowMoreProjects(false);
-  };
+  const filtered = useMemo(() => {
+    if (filter === "All") return projects;
+    return projects.filter((project) => project.category === filter);
+  }, [projects, filter]);
+
+  const staged = showMore ? filtered : filtered.slice(0, STAGE_COUNT);
+  const left = [];
+  const right = [];
+  staged.forEach((project, index) => {
+    if (index % 4 < 2) left.push(project);
+    else right.push(project);
+  });
+  const extraCount = filtered.length - STAGE_COUNT;
 
   return (
-    <SectionReveal id="projects" className="section section-projects">
-      <RevealGroup className="container">
-        <RevealItem className="section-header">
-          <h2 className="section-title">
-            Featured <span className="text-gradient">AI Projects</span>
+    <SceneSection id="projects">
+      <div className="projects-stage">
+        <header className="projects-head">
+          <p className="mono-label">03 — Work</p>
+          <h2>
+            Things I&apos;ve <em className="accent-cyan">built</em>
           </h2>
-          <p className="section-subtitle">
-            Explore projects in computer vision, language models, edge systems, and web apps.
-          </p>
-        </RevealItem>
+          <div className="project-filters" role="group" aria-label="Filter projects">
+            {FILTERS.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className="chip project-filter"
+                aria-pressed={filter === item}
+                onClick={() => setFilter(item)}
+              >
+                {item === "CV" ? "Computer Vision" : item}
+              </button>
+            ))}
+          </div>
+        </header>
 
-        <RevealItem className="project-filters" role="group" aria-label="Filter projects by category">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              className={`project-filter${activeFilter === filter ? " is-active" : ""}`}
-              aria-pressed={activeFilter === filter}
-              onClick={() => selectFilter(filter)}
-            >
-              {activeFilter === filter && (
-                <motion.span
-                  layoutId="active-project-filter"
-                  className="project-filter-indicator"
-                  transition={{ duration: reducedMotion ? 0 : 0.2 }}
-                />
-              )}
-              <span>{filter}</span>
-            </button>
-          ))}
-        </RevealItem>
+        <div className="projects-board">
+          <div className="projects-col">
+            {left.map((project) => (
+              <ProjectCard key={project.title} project={project} onSelect={setSelected} />
+            ))}
+          </div>
+          <div className="projects-gap" aria-hidden="true" />
+          <div className="projects-col">
+            {right.map((project) => (
+              <ProjectCard key={project.title} project={project} onSelect={setSelected} />
+            ))}
+          </div>
+        </div>
 
-        <RevealItem className="projects-grid-reveal">
-          <motion.div
-            layout
-            transition={{ duration: reducedMotion ? 0 : 0.28, ease: "easeOut" }}
-            className="projects-grid-3d"
+        {extraCount > 0 && (
+          <button
+            type="button"
+            className="btn btn-ghost projects-more"
+            onClick={() => setShowMore((value) => !value)}
           >
-            <AnimatePresence mode="sync" initial={false}>
-              {visibleProjects.map((project) => (
-                <ProjectCard
-                  key={project.title}
-                  project={project}
-                  onSelect={setSelectedProject}
-                  reducedMotion={reducedMotion}
-                />
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        </RevealItem>
-
-        {visibleProjects.length === 0 && (
-          <RevealItem className="projects-empty-state">
-            No featured projects in this category yet.
-          </RevealItem>
+            {showMore ? "Show fewer" : `More projects (${extraCount})`}
+          </button>
         )}
+      </div>
 
-        {olderProjects.length > 0 && (
-          <RevealItem className="projects-more-row">
-            <button
-              type="button"
-              className="projects-more-button"
-              aria-expanded={showMoreProjects}
-              onClick={() => setShowMoreProjects((shown) => !shown)}
-            >
-              {showMoreProjects ? "Show fewer projects" : `More projects (${olderProjects.length})`}
-              <span aria-hidden="true">{showMoreProjects ? " ↑" : " ↓"}</span>
-            </button>
-          </RevealItem>
-        )}
-      </RevealGroup>
-
-      {selectedProject && (
-        <ProjectDetails project={selectedProject} onClose={closeDetails} />
+      {selected && (
+        <ProjectDetails project={selected} onClose={() => setSelected(null)} />
       )}
-    </SectionReveal>
+    </SceneSection>
+  );
+}
+
+function ProjectCard({ project, onSelect }) {
+  const metric = realText(project.badge) || realText(project.result);
+
+  return (
+    <button
+      type="button"
+      className="project-card"
+      onClick={() => onSelect(project)}
+    >
+      <div>
+        <span className="mono-label">{project.category}</span>
+        <h3>{shortTitle(project.title)}</h3>
+        {metric && <p className="project-metric">{metric}</p>}
+      </div>
+      <span className="project-card-arrow" aria-hidden="true">→</span>
+    </button>
   );
 }
