@@ -630,8 +630,8 @@ h3 {
 
 .projects-board {
   display: grid;
-  grid-template-columns: 1fr minmax(96px, 12vw) 1fr;
-  gap: clamp(8px, 1.2vw, 16px);
+  grid-template-columns: minmax(200px, 1fr) minmax(240px, 34vw) minmax(200px, 1fr);
+  gap: clamp(18px, 2.4vw, 32px);
   align-items: stretch;
 }
 
@@ -653,7 +653,7 @@ h3 {
 }
 
 .projects-gap {
-  min-height: 28vh;
+  min-height: 32vh;
 }
 
 .project-card {
