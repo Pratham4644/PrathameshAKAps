@@ -13,6 +13,7 @@ import Projects from "./components/Projects";
 import Experience from "./components/Experience";
 import Contact from "./components/Contact";
 import CustomCursor from "./components/CustomCursor";
+import SceneBackdrop from "./components/SceneBackdrop";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { SCENES } from "./data/content";
 
@@ -51,6 +52,7 @@ export default function App() {
   return (
     <>
       <CustomCursor />
+      {!prefersReducedMotion && <SceneBackdrop activeScene={activeScene} />}
       <a className="skip-to-content" href="#main-content">Skip to content</a>
       <Navbar activeScene={activeScene} />
       <ProgressRail activeScene={activeScene} />

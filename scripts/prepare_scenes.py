@@ -27,10 +27,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIR = ROOT / "potfolio_photo"
 OUTPUT_DIR = ROOT / "public" / "scenes"
 
-TARGET_WIDTH = 1920
-WEBP_QUALITY_START = 85
-WEBP_QUALITY_FLOOR = 82
-WEBP_SIZE_CAP = 350 * 1024  # 350 KB
+TARGET_WIDTH = 3840
+WEBP_QUALITY = 90
 DEPTH_BLUR_RADIUS = 2.4
 DEPTH_INFER_WIDTH = 768
 DEPTH_LOAD_TIMEOUT_SEC = 240
@@ -57,12 +55,15 @@ def log(message: str) -> None:
 
 
 def find_source(page: int) -> Path:
-    """Pick Page_N.jpg / .jpeg / .png / .webp from the photo folder."""
-    for ext in (".jpg", ".jpeg", ".png", ".webp", ".JPG", ".JPEG", ".PNG"):
-        candidate = SOURCE_DIR / f"Page_{page}{ext}"
-        if candidate.exists():
-            return candidate
-    raise FileNotFoundError(f"No Page_{page} photo found in {SOURCE_DIR}")
+    """Pick the largest Page_N.jpg / .png / .webp from the photo folder."""
+    candidates = [
+        SOURCE_DIR / f"Page_{page}{ext}"
+        for ext in (".jpg", ".jpeg", ".png", ".webp", ".JPG", ".JPEG", ".PNG")
+        if (SOURCE_DIR / f"Page_{page}{ext}").exists()
+    ]
+    if not candidates:
+        raise FileNotFoundError(f"No Page_{page} photo found in {SOURCE_DIR}")
+    return max(candidates, key=lambda path: path.stat().st_size)
 
 
 def kb(path: Path) -> float:
@@ -125,55 +126,21 @@ def _download(url: str, dest: Path) -> None:
     tmp.replace(dest)
 
 
-def upscale_to_width(image: Image.Image) -> Image.Image:
-    """Grow the photo to 1920px wide without changing its aspect ratio."""
-    if image.width >= TARGET_WIDTH:
-        if image.width == TARGET_WIDTH:
-            return image.convert("RGB")
-        ratio = TARGET_WIDTH / image.width
-        size = (TARGET_WIDTH, max(1, round(image.height * ratio)))
-        return image.convert("RGB").resize(size, Image.Resampling.LANCZOS)
-
-    enhancer = try_load_realesrgan()
+def fit_to_max_width(image: Image.Image) -> Image.Image:
+    """Keep native pixels. Only shrink if wider than 3840."""
     rgb = image.convert("RGB")
-
-    if enhancer is not None:
-        import numpy as np
-
-        array = np.array(rgb)
-        try:
-            output, _ = enhancer.enhance(array, outscale=4)
-            up = Image.fromarray(output)
-            ratio = TARGET_WIDTH / up.width
-            size = (TARGET_WIDTH, max(1, round(up.height * ratio)))
-            return up.resize(size, Image.Resampling.LANCZOS)
-        except Exception as exc:
-            log(f"  Real-ESRGAN enhance failed ({exc}); using Lanczos.")
-
+    if rgb.width <= TARGET_WIDTH:
+        return rgb
     ratio = TARGET_WIDTH / rgb.width
     size = (TARGET_WIDTH, max(1, round(rgb.height * ratio)))
-    up = rgb.resize(size, Image.Resampling.LANCZOS)
-    # Unsharp mask: slightly boost edges so the enlarge does not look mushy.
-    return up.filter(ImageFilter.UnsharpMask(radius=1.4, percent=85, threshold=3))
+    return rgb.resize(size, Image.Resampling.LANCZOS)
 
 
 def save_webp(image: Image.Image, dest: Path) -> int:
-    """Save WebP, dropping quality from 85 to 82 if the file is over 350 KB."""
     dest.parent.mkdir(parents=True, exist_ok=True)
-    used_quality = WEBP_QUALITY_START
-    data = b""
-    for quality in range(WEBP_QUALITY_START, WEBP_QUALITY_FLOOR - 1, -1):
-        buffer = io.BytesIO()
-        image.save(buffer, format="WEBP", quality=quality, method=6)
-        data = buffer.getvalue()
-        used_quality = quality
-        if len(data) <= WEBP_SIZE_CAP:
-            break
-    dest.write_bytes(data)
-    log(f"  webp q={used_quality}  {kb(dest):6.1f} KB  -> {dest.relative_to(ROOT)}")
-    if dest.stat().st_size > WEBP_SIZE_CAP:
-        log("  warning: still over 350 KB at quality 82")
-    return used_quality
+    image.save(dest, format="WEBP", quality=WEBP_QUALITY, method=6)
+    log(f"  webp q={WEBP_QUALITY}  {kb(dest):6.1f} KB  -> {dest.relative_to(ROOT)}")
+    return WEBP_QUALITY
 
 
 # --- depth maps ------------------------------------------------------------
@@ -276,19 +243,19 @@ def process_page(page: int, *, do_depth: bool) -> dict:
     source = find_source(page)
     log(f"\n[{page}/6] {source.name}  {Image.open(source).size}")
     image = Image.open(source)
-    upscaled = upscale_to_width(image)
-    log(f"  upscaled to  {upscaled.size}")
+    fitted = fit_to_max_width(image)
+    log(f"  output size  {fitted.size}")
 
     webp_path = OUTPUT_DIR / f"Page_{page}.webp"
-    quality = save_webp(upscaled, webp_path)
+    quality = save_webp(fitted, webp_path)
 
     depth_path = OUTPUT_DIR / f"Page_{page}-depth.png"
-    has_depth = make_depth_map(upscaled, depth_path) if do_depth else False
+    has_depth = make_depth_map(fitted, depth_path) if do_depth else False
 
     return {
         "page": page,
         "source": source.name,
-        "size": upscaled.size,
+        "size": fitted.size,
         "webp": webp_path,
         "webp_kb": kb(webp_path),
         "quality": quality,

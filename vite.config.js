@@ -10,7 +10,7 @@ export default defineConfig({
     port: 5173,
     watch: {
       ignored: (filePath) =>
-        /PrathameshAKAps[/\\]idila_piano\.mp3$/i.test(filePath),
+        /\.(mp3|png|jpe?g|webp|gif|avif)$/i.test(filePath),
     },
   },
   build: {
